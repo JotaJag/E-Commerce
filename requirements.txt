@@ -1,0 +1,11 @@
+django
+psycopg2-binary
+python-dotenv
+pillow
+django-jazzmin
+djangorestframework
+django-cors-headers
+django-rest-knox
+coverage==7.4.0
+stripe
+

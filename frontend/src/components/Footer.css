@@ -1,0 +1,117 @@
+.app-footer {
+  background: linear-gradient(to bottom, #ffffff, #F5F5DC);
+  color: #2C3E50;
+  padding: 80px 20px 20px 20px;
+  margin-top: 60px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.footer-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-content ul li {
+  transition: all 0.3s ease;
+}
+
+.footer-content ul li a {
+  color: #2C3E50;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  display: inline-block;
+}
+
+.footer-content ul li a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #E85B4E;
+  transition: width 0.3s ease;
+}
+
+.footer-content ul li a:hover::after {
+  width: 100%;
+}
+
+.footer-content ul li a:hover {
+  color: #E85B4E;
+}
+
+.footer-content p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #999;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    padding: 60px 15px 15px 15px;
+    margin-top: 50px;
+  }
+
+  .footer-content {
+    gap: 20px;
+  }
+
+  .footer-content ul {
+    gap: 15px;
+  }
+
+  .footer-content ul li a {
+    font-size: 0.9rem;
+  }
+
+  .footer-content p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-footer {
+    padding: 40px 10px 10px 10px;
+    margin-top: 30px;
+  }
+
+  .footer-content {
+    gap: 15px;
+  }
+
+  .footer-content ul {
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-content ul li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer-content ul li a {
+    font-size: 0.8rem;
+  }
+
+  .footer-content p {
+    font-size: 0.75rem;
+  }
+}

@@ -1,0 +1,318 @@
+.modal-contacto-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-contacto-contenido {
+  background: white;
+  border-radius: 14px;
+  padding: 0;
+  max-width: 580px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.18s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Cabecera con acento de color */
+.modal-contacto-header {
+  background: linear-gradient(135deg, #E85B4E 0%, #c94a3e 100%);
+  border-radius: 14px 14px 0 0;
+  padding: 1.75rem 3.5rem 1.75rem 2rem;
+  color: white;
+}
+
+.modal-contacto-header h2 {
+  font-size: 1.6rem;
+  margin: 0 0 0.4rem;
+  color: white;
+}
+
+.modal-contacto-descripcion {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Formulario */
+.modal-contacto-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem 2rem 2rem;
+}
+
+.form-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-grupo {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.form-grupo label {
+  font-weight: 600;
+  color: #2C3E50;
+  margin-bottom: 0.4rem;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.form-grupo input,
+.form-grupo textarea,
+.form-grupo select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #E8E8E8;
+  border-radius: 8px;
+  font-size: 0.97rem;
+  font-family: inherit;
+  color: #333;
+  background: #FAFAFA;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.form-grupo input:focus,
+.form-grupo textarea:focus,
+.form-grupo select:focus {
+  outline: none;
+  border-color: #E85B4E;
+  box-shadow: 0 0 0 3px rgba(232, 91, 78, 0.12);
+  background: white;
+}
+
+.form-grupo select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.form-grupo select option[value=""] {
+  color: #999;
+}
+
+.form-grupo textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+/* Contador de caracteres */
+.char-contador {
+  text-align: right;
+  font-size: 0.78rem;
+  color: #999;
+  margin-top: 0.3rem;
+}
+
+.char-contador--limite {
+  color: #E85B4E;
+  font-weight: 600;
+}
+
+/* Botón de envío */
+.btn-enviar-contacto {
+  background-color: #E85B4E;
+  color: white;
+  border: none;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  font-weight: 600;
+  margin-top: 0.25rem;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-enviar-contacto:hover:not(:disabled) {
+  background-color: #D94B3E;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(232, 91, 78, 0.35);
+}
+
+.btn-enviar-contacto:disabled {
+  cursor: not-allowed;
+}
+
+/* Spinner de tres puntos */
+.btn-spinner {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.btn-spinner span {
+  width: 7px;
+  height: 7px;
+  background: white;
+  border-radius: 50%;
+  animation: bounce 0.55s infinite ease-in-out;
+}
+
+.btn-spinner span:nth-child(2) { animation-delay: 0.15s; }
+.btn-spinner span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Botón cerrar */
+.modal-contacto-cerrar {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+  z-index: 1;
+  padding: 0;
+}
+
+.modal-contacto-cerrar:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Estado de éxito */
+.modal-contacto-exito {
+  text-align: center;
+  padding: 3.5rem 2rem;
+}
+
+.exito-icono {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #4CAF50, #388E3C);
+  color: white;
+  font-size: 2.2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  animation: scaleIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.35);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-contacto-exito h2 {
+  color: #2C3E50;
+  font-size: 1.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal-contacto-exito p {
+  color: #555;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+/* Responsive — tablet estrecha */
+@media (max-width: 580px) {
+  .form-fila {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-contacto-header {
+    padding: 1.5rem 3.5rem 1.5rem 1.25rem;
+  }
+
+  .modal-contacto-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .modal-contacto-form {
+    padding: 1.25rem 1.25rem 1.5rem;
+    gap: 1rem;
+  }
+}
+
+/* Responsive — móvil: bottom sheet */
+@media (max-width: 480px) {
+  .modal-contacto-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-contacto-contenido {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 18px 18px 0 0;
+    animation: slideSheet 0.22s ease-out;
+  }
+
+  .modal-contacto-header {
+    border-radius: 18px 18px 0 0;
+  }
+
+  @keyframes slideSheet {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .modal-contacto-exito {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .exito-icono {
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+  }
+}

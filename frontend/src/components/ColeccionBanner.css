@@ -1,0 +1,164 @@
+/* Banner de colección en página de productos */
+.coleccion-banner {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.coleccion-banner-imagen {
+  width: 600px;
+  min-width: 600px;
+  height: 320px;
+  border-radius: 8px 0 0 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.coleccion-banner-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coleccion-banner-gradient {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  pointer-events: none;
+}
+
+.coleccion-banner-info {
+  flex: 1;
+  padding-left: 2rem;
+}
+
+.coleccion-banner-titulo {
+  color: #333;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-left: 0;
+}
+
+.coleccion-banner-descripcion {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 0;
+  line-height: 1.6;
+  padding-left: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .coleccion-banner-imagen {
+    width: 500px;
+    min-width: 500px;
+    height: 280px;
+  }
+
+  .coleccion-banner-info {
+    padding-left: 1.5rem;
+  }
+
+  .coleccion-banner-titulo {
+    font-size: 26px;
+  }
+
+  .coleccion-banner-descripcion {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .coleccion-banner {
+    padding-left: 3%;
+    padding-right: 3%;
+    gap: 1.5rem;
+  }
+
+  .coleccion-banner-imagen {
+    width: 400px;
+    min-width: 400px;
+    height: 240px;
+  }
+
+  .coleccion-banner-titulo {
+    font-size: 24px;
+  }
+
+  .coleccion-banner-descripcion {
+    font-size: 0.95rem;
+  }
+
+  .coleccion-banner-gradient {
+    width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .coleccion-banner {
+    flex-direction: column;
+    padding-left: 2%;
+    padding-right: 2%;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .coleccion-banner-imagen {
+    width: 100%;
+    min-width: auto;
+    height: 200px;
+    border-radius: 8px;
+  }
+
+  .coleccion-banner-gradient {
+    display: none;
+  }
+
+  .coleccion-banner-info {
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .coleccion-banner-titulo {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .coleccion-banner-descripcion {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 480px) {
+  .coleccion-banner {
+    padding-left: 4%;
+    padding-right: 4%;
+    margin-top: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .coleccion-banner-imagen {
+    height: 160px;
+    border-radius: 6px;
+  }
+
+  .coleccion-banner-titulo {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .coleccion-banner-descripcion {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}

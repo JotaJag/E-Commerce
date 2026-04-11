@@ -1,0 +1,25 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Tienda Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold text-center my-8">¡Bienvenido a mi E-Commerce!</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for producto in productos %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="{{ producto.imagen.url }}" class="w-full h-32 object-cover" alt="{{ producto.nombre }}">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold mb-2">{{ producto.nombre }}</h2>
+                    <p class="text-gray-700 mb-4"><strong>Precio:</strong> {{ producto.precioUnitario }}€</p>
+                    <a href="#" class="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Añadir al carrito</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

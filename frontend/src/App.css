@@ -1,0 +1,26 @@
+.main-content {
+  padding-top: 130px;
+  flex: 1;
+  min-height: calc(100vh - 130px);
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    padding-top: 140px;
+    min-height: calc(100vh - 140px);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 160px;
+    min-height: calc(100vh - 160px);
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding-top: 145px;
+    min-height: calc(100vh - 145px);
+  }
+}

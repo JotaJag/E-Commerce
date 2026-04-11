@@ -1,0 +1,204 @@
+import { useState, useEffect, useContext } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { ContextoCarrito } from '../context/ContextoCarrito';
+import Modal from './Modal';
+import FichaProducto from './Ficha_producto';
+import './Productos.css';
+import './Modal.css';
+import './ColeccionBanner.css';
+
+function ProductosColeccion() {
+  const [products, setProducts] = useState([]);
+  const [quantities, setQuantities] = useState({});
+  const { agregarAlCarrito, articulosCarrito } = useContext(ContextoCarrito);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [addingProductId, setAddingProductId] = useState(null);
+
+  useEffect(() => {
+    // Limpiar estado al desmontar
+    return () => {
+      setSelectedProduct(null);
+    };
+  }, []);
+  const [coleccion, setColeccion] = useState(null);
+  const { coleccionNombre } = useParams();
+
+  useEffect(() => {
+    // Obtener información de la colección por nombre
+    fetch(`http://localhost:8000/api/colecciones/${encodeURIComponent(coleccionNombre)}/`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('No se pudo cargar la colección');
+      })
+      .then(data => {
+        setColeccion(data);
+      })
+      .catch(error => {});
+
+    // Obtener productos de la colección
+    fetch(`http://localhost:8000/api/productos/`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Hay problemas para cargar los productos.');
+        }
+        return response.json();
+      })
+      .then(data => {
+        const productList = Array.isArray(data) ? data : (data.results || []);
+        const productosFiltrados = productList.filter(p => p.coleccion_nombre === coleccionNombre);
+        setProducts(productosFiltrados);
+      })
+      .catch(error => {
+      });
+  }, [coleccionNombre]);
+
+  const getStockDisponibleReal = (product) => {
+    const enCarrito = articulosCarrito.find(item => item.id === product.idProducto);
+    const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
+    return (product.stock_disponible || 0) - cantidadEnCarrito;
+  };
+
+  const handleQuantityChange = (productId, newQuantity) => {
+    const product = products.find(p => p.idProducto === productId);
+    const maxStock = getStockDisponibleReal(product);
+    setQuantities(prev => ({
+      ...prev,
+      [productId]: Math.max(1, Math.min(newQuantity, maxStock)),
+    }));
+  };
+
+  const handleAddToCart = (product) => {
+    const stockDisponible = getStockDisponibleReal(product);
+    if (stockDisponible <= 0) {
+      alert('Producto sin stock disponible');
+      return;
+    }
+
+    const quantity = quantities[product.idProducto] || 1;
+    if (quantity > stockDisponible) {
+      alert(`Solo hay ${stockDisponible} unidades disponibles`);
+      return;
+    }
+
+    setAddingProductId(product.idProducto);
+    agregarAlCarrito(product, quantity);
+    
+    // Resetear cantidad a 1
+    setQuantities(prev => ({...prev, [product.idProducto]: 1}));
+    
+    setTimeout(() => {
+      setAddingProductId(null);
+    }, 2000);
+  };
+
+  const handleOpenModal = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
+  };
+
+  const productosFiltrados = products.filter(product => product.estado);
+
+  return (
+    <div className="resultados-busqueda-container">
+      <div className="breadcrumb">
+        <Link to="/">Inicio</Link> / Colecciones / {coleccion ? coleccion.nombre : 'Cargando...'}
+      </div>
+      
+      {coleccion && (
+        <div className="coleccion-banner">
+          {coleccion.imagen_url && (
+            <div className="coleccion-banner-imagen">
+              <img 
+                src={coleccion.imagen_url} 
+                alt={coleccion.nombre}
+              />
+              <div className="coleccion-banner-gradient"></div>
+            </div>
+          )}
+          <div className="coleccion-banner-info">
+            <h1 className="coleccion-banner-titulo">
+              {coleccion.nombre}
+            </h1>
+            {coleccion.descripcion && (
+              <p className="coleccion-banner-descripcion">
+                {coleccion.descripcion}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+      
+      <h2 className="subtitulo-bloque">
+        {productosFiltrados.length} producto{productosFiltrados.length !== 1 ? 's' : ''} disponible{productosFiltrados.length !== 1 ? 's' : ''}
+      </h2>
+      
+      <div className="product-list">
+        {productosFiltrados.length > 0 ? (
+          productosFiltrados.map(product => {
+            const isAdding = addingProductId === product.idProducto;
+            const stockDisponible = getStockDisponibleReal(product);
+            const currentQuantity = quantities[product.idProducto] || 1;
+            
+            return (
+              <div key={product.idProducto} className="product-card">
+                <div onClick={() => handleOpenModal(product)} className="product-image-container" style={{cursor: 'pointer'}}>
+                  <img src={product.imagen_url} alt={product.nombre} />
+                </div>
+                <div className="product-info">
+                  <h2>{product.nombre}</h2>
+                  <p className="product-price">{product.precioUnitario} €</p>
+                  
+                  {stockDisponible <= 5 && stockDisponible > 0 && (
+                    <p className="stock-warning">¡Solo quedan {stockDisponible} unidades!</p>
+                  )}
+                  {stockDisponible === 0 && (
+                    <p className="stock-agotado">Sin stock</p>
+                  )}
+                  <div className="product-card-controls">
+                    <div className="cantidad-control-card">
+                      <button 
+                        onClick={() => handleQuantityChange(product.idProducto, currentQuantity - 1)}
+                        disabled={stockDisponible === 0}
+                      >
+                        −
+                      </button>
+                      <span>{currentQuantity}</span>
+                      <button 
+                        onClick={() => handleQuantityChange(product.idProducto, currentQuantity + 1)}
+                        disabled={stockDisponible === 0 || currentQuantity >= stockDisponible}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button 
+                      className={`btn-anadir ${isAdding ? 'agregado' : ''}`}
+                      onClick={() => handleAddToCart(product)}
+                      disabled={isAdding || stockDisponible === 0}
+                    >
+                      {isAdding ? 'Agregado ✓' : (stockDisponible === 0 ? 'Agotado' : 'Comprar')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p>No hay productos disponibles en esta colección.</p>
+        )}
+      </div>
+
+      {selectedProduct && selectedProduct.idProducto && (
+        <Modal onClose={handleCloseModal}>
+          <FichaProducto productId={selectedProduct.idProducto} />
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+export default ProductosColeccion;
