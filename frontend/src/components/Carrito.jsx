@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { ContextoCarrito } from '../context/ContextoCarrito';
@@ -14,6 +14,31 @@ const Carrito = () => {
 
     const [procesando, setProcesando] = useState(false);
     const [error, setError] = useState(null);
+    const [productosStock, setProductosStock] = useState({});
+
+    useEffect(() => {
+        let mounted = true;
+        const ids = articulosCarrito.map(a => a.id).filter(Boolean);
+        const idsToFetch = ids.filter(id => productosStock[id] === undefined);
+        if (idsToFetch.length === 0) return;
+
+        Promise.all(idsToFetch.map(id =>
+            fetch(`http://localhost:8000/api/productos/${id}/`)
+                .then(res => res.ok ? res.json() : null)
+                .then(data => ({ id, stock: data ? (data.stock_disponible ?? data.stock ?? 0) : 0 }))
+                .catch(() => ({ id, stock: 0 }))
+        ))
+        .then(results => {
+            if (!mounted) return;
+            setProductosStock(prev => {
+                const next = { ...prev };
+                results.forEach(r => { next[r.id] = r.stock; });
+                return next;
+            });
+        });
+
+        return () => { mounted = false; };
+    }, [articulosCarrito]);
 
     const calcularTotalSinDescuentos = () =>
         articulosCarrito.reduce((acc, item) => acc + (item.precioOriginal ?? item.precio) * item.cantidad, 0);
@@ -115,14 +140,22 @@ const Carrito = () => {
                             const descuento = parseFloat(item.descuentoEfectivo ?? 0) || 0;
                             const subtotal = (precioUnit * (item.cantidad || 1));
 
-                            const aumentar = () => actualizarCantidad({ idProducto: item.id }, (item.cantidad || 1) + 1);
+                            const stockDisponible = (productosStock[item.id] !== undefined) ? productosStock[item.id] : null;
+
+                            const aumentar = () => {
+                                const nuevo = (item.cantidad || 1) + 1;
+                                if (stockDisponible !== null && nuevo > stockDisponible) {
+                                    alert(`Solo hay ${stockDisponible} unidades disponibles de ${item.nombre}`);
+                                    return;
+                                }
+                                actualizarCantidad({ idProducto: item.id }, nuevo);
+                            };
                             const reducir = () => {
                                 const actual = item.cantidad || 1;
                                 if (actual <= 1) return;
                                 actualizarCantidad({ idProducto: item.id }, actual - 1);
                             };
                             const eliminar = () => {
-                                if (!confirm('¿Eliminar este artículo del carrito?')) return;
                                 eliminarDelCarrito({ idProducto: item.id });
                             };
 
@@ -140,12 +173,33 @@ const Carrito = () => {
                                         ) : (
                                             <p>Precio: {precioUnit.toFixed(2)} €</p>
                                         )}
+
+                                        {stockDisponible !== null && (
+                                            (() => {
+                                                const stockInsuficiente = item.cantidad > stockDisponible;
+                                                if (stockInsuficiente) {
+                                                    return (
+                                                        <p style={{color: '#E85B4E', fontSize: '0.9rem', fontWeight: 'bold'}}>
+                                                            ⚠️ Solo quedan {stockDisponible} unidades disponibles
+                                                        </p>
+                                                    );
+                                                }
+                                                if (stockDisponible > 0 && stockDisponible <= 5) {
+                                                    return (
+                                                        <p style={{color: '#FF9800', fontSize: '0.9rem'}}>
+                                                            Solo quedan {stockDisponible} unidades
+                                                        </p>
+                                                    );
+                                                }
+                                                return null;
+                                            })()
+                                        )}
                                     </div>
                                     <div className="carrito-item-actions" style={{marginLeft: 'auto'}}>
                                         <div className="cantidad-control">
                                             <button onClick={reducir} disabled={(item.cantidad || 1) <= 1}>-</button>
                                             <span>{item.cantidad}</span>
-                                            <button onClick={aumentar}>+</button>
+                                            <button onClick={aumentar} disabled={stockDisponible !== null && (item.cantidad || 1) >= stockDisponible}>+</button>
                                         </div>
                                         <button onClick={eliminar} className="btn-eliminar">Eliminar</button>
                                     </div>

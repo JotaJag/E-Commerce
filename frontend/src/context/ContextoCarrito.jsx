@@ -73,9 +73,29 @@ export const ProveedorCarrito = ({ children }) => {
             }
 
             const datos = await response.json();
-            setArticulosCarrito(
-                datos?.lineas?.map(l => formatearProducto(l.producto, l.cantidad)) || []
-            );
+            const listaDesdeBackend = datos?.lineas?.map(l => formatearProducto(l.producto, l.cantidad)) || [];
+
+            // Mantener el orden actual del carrito cuando sea posible:
+            setArticulosCarrito((prev) => {
+                if (!prev || prev.length === 0) return listaDesdeBackend;
+                const byId = new Map(listaDesdeBackend.map(item => [item.id, item]));
+                const ordered = [];
+                // primero, los que ya estaban en prev, en el mismo orden
+                for (const p of prev) {
+                    if (byId.has(p.id)) {
+                        ordered.push(byId.get(p.id));
+                        byId.delete(p.id);
+                    }
+                }
+                // luego, los nuevos que no estaban en prev (mantener su orden desde backend)
+                for (const item of listaDesdeBackend) {
+                    if (byId.has(item.id)) {
+                        ordered.push(item);
+                        byId.delete(item.id);
+                    }
+                }
+                return ordered;
+            });
         } catch (err) {
             setError('Error de red o servidor no disponible.');
             setEstaAutenticado(false);
