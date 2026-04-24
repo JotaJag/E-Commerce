@@ -63,6 +63,11 @@ const IniciarSesion = ({ onNavigate }) => {
                     </div>
                     <button type="submit" className="form-button">Acceder</button>
                 </form>
+                <p className="switch-form-link" style={{ marginTop: '10px' }}>
+                    <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('recuperar-password'); }}>
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </p>
                 <p className="switch-form-link">
                     ¿No tienes una cuenta?{' '}
                     <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('register'); }}>

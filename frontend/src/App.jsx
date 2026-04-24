@@ -17,6 +17,8 @@ import Colecciones from './components/Colecciones';
 import ColeccionesDestacadas from './components/ColeccionesDestacadas';
 import IniciarSesion from './components/IniciarSesion';
 import Registro from './components/Registro';
+import SolicitarRecuperacion from './components/SolicitarRecuperacion';
+import RestablecerPassword from './components/RestablecerPassword';
 import Carrito from './components/Carrito';
 import PagoExitoso from './components/PagoExitoso';
 import Profile from './components/Profile';
@@ -56,6 +58,8 @@ const AppContent = () => {
           <Route path="/busqueda" element={<ResultadosBusqueda />} />
           <Route path="/login" element={<IniciarSesion onNavigate={handleAuthNavigation} />} />
           <Route path="/register" element={<Registro onNavigate={handleAuthNavigation} />} />
+          <Route path="/recuperar-password" element={<SolicitarRecuperacion />} />
+          <Route path="/restablecer-password/:uid/:token" element={<RestablecerPassword />} />
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/pago" element={<Navigate to="/carrito" replace />} />
           <Route path="/pago-exitoso" element={<PagoExitoso />} />

@@ -93,3 +93,65 @@ class ChangePasswordAPI(generics.GenericAPIView):
             {"message": "Contraseña cambiada exitosamente"},
             status=status.HTTP_200_OK
         )
+
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import send_mail
+from django.conf import settings
+from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer
+from .models import User
+
+class PasswordResetRequestAPI(generics.GenericAPIView):
+    serializer_class = PasswordResetRequestSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"message": "Si el correo está registrado, recibirás un enlace."}, status=status.HTTP_200_OK)
+
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        
+        reset_url = f"{settings.FRONTEND_URL}/restablecer-password/{uidb64}/{token}"
+        
+        send_mail(
+            subject='Recuperación de contraseña',
+            message=f'Hola,\n\nHaz clic en el siguiente enlace para restablecer tu contraseña:\n\n{reset_url}\n\nSi no solicitaste este cambio, puedes ignorar este correo.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=False,
+        )
+        
+        return Response({"message": "Si el correo está registrado, recibirás un enlace."}, status=status.HTTP_200_OK)
+
+class PasswordResetConfirmAPI(generics.GenericAPIView):
+    serializer_class = PasswordResetConfirmSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        uidb64 = serializer.validated_data['uid']
+        token = serializer.validated_data['token']
+        new_password = serializer.validated_data['new_password']
+        
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            user.set_password(new_password)
+            user.save()
+            return Response({"message": "Contraseña restablecida correctamente."}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "El enlace no es válido o ha expirado."}, status=status.HTTP_400_BAD_REQUEST)
