@@ -108,7 +108,7 @@ function ProductosColeccion() {
   return (
     <div className="resultados-busqueda-container">
       <div className="breadcrumb">
-        <Link to="/">Inicio</Link> / Colecciones / {coleccion ? coleccion.nombre : 'Cargando...'}
+        <Link to="/">Inicio</Link> / <Link to="/colecciones">Colecciones</Link> / {coleccion ? coleccion.nombre : 'Cargando...'}
       </div>
       
       {coleccion && (
