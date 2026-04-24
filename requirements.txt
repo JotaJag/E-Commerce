@@ -7,5 +7,7 @@ djangorestframework
 django-cors-headers
 django-rest-knox
 coverage==7.4.0
+pytest
+pytest-django
 stripe
 

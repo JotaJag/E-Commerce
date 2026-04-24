@@ -1,8 +1,6 @@
 services:
   db:
     image: postgres:17
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -45,7 +43,7 @@ services:
   backend-test:
     profiles: [test]
     build: .
-    command: pytest
+    command: python -m pytest
     volumes:
       - .:/app
     env_file:

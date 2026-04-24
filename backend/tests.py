@@ -177,14 +177,12 @@ class CarritoCompraModelTest(TestCase):
             carrito=carrito,
             producto=self.producto1,
             cantidad=2,
-            precio_congelado=self.producto1.precioUnitario
         )
-        
+
         LineaCarrito.objects.create(
             carrito=carrito,
             producto=self.producto2,
             cantidad=1,
-            precio_congelado=self.producto2.precioUnitario
         )
         
         # 2 * 10 + 1 * 20 = 40
@@ -198,15 +196,13 @@ class CarritoCompraModelTest(TestCase):
             carrito=carrito,
             producto=self.producto1,
             cantidad=1,
-            precio_congelado=self.producto1.precioUnitario
         )
-        
+
         with self.assertRaises(Exception):
             LineaCarrito.objects.create(
                 carrito=carrito,
                 producto=self.producto1,
                 cantidad=2,
-                precio_congelado=self.producto1.precioUnitario
             )
 
 
@@ -461,7 +457,7 @@ class ProductoSerializerTest(TestCase):
         self.assertEqual(set(data.keys()), {
             'idProducto', 'nombre', 'descripcion', 'precioUnitario',
             'imagen', 'imagen_url', 'estado', 'marca', 'modelo',
-            'color', 'tipo', 'coleccion', 'categoria', 'stock', 'stock_reservado', 'stock_disponible'
+            'color', 'tipo', 'coleccion', 'coleccion_nombre', 'categoria', 'stock', 'stock_reservado', 'stock_disponible'
         })
 
     def test_producto_serializer_field_content(self):
@@ -638,7 +634,6 @@ class LineaCarritoSerializerTest(TestCase):
             carrito=self.carrito,
             producto=self.producto,
             cantidad=3,
-            precio_congelado=Decimal('25.00')
         )
 
     def test_linea_carrito_serializer_includes_producto(self):
@@ -694,13 +689,11 @@ class CarritoCompraSerializerTest(TestCase):
             carrito=self.carrito,
             producto=self.producto1,
             cantidad=2,
-            precio_congelado=Decimal('10.00')
         )
         LineaCarrito.objects.create(
             carrito=self.carrito,
             producto=self.producto2,
             cantidad=1,
-            precio_congelado=Decimal('20.00')
         )
 
     def test_carrito_serializer_includes_lineas(self):
