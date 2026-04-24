@@ -24,18 +24,20 @@ function ProductosColeccion() {
   const { coleccionNombre } = useParams();
 
   useEffect(() => {
-    // Obtener información de la colección por nombre
-    fetch(`http://localhost:8000/api/colecciones/${encodeURIComponent(coleccionNombre)}/`)
+    // Obtener información de la colección por nombre usando el listado (fallback cuando no hay lookup por nombre)
+    fetch('http://localhost:8000/api/colecciones/')
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('No se pudo cargar la colección');
+        if (!response.ok) throw new Error('No se pudo cargar la lista de colecciones');
+        return response.json();
       })
       .then(data => {
-        setColeccion(data);
+        const list = Array.isArray(data) ? data : (data.results || []);
+        const found = list.find(c => String(c.nombre) === String(coleccionNombre));
+        setColeccion(found || null);
       })
-      .catch(error => {});
+      .catch(error => {
+        setColeccion(null);
+      });
 
     // Obtener productos de la colección
     fetch(`http://localhost:8000/api/productos/`)
@@ -151,7 +153,29 @@ function ProductosColeccion() {
                 </div>
                 <div className="product-info">
                   <h2>{product.nombre}</h2>
-                  <p className="product-price">{product.precioUnitario} €</p>
+                  {
+                    (() => {
+                      const descuentoPorMostrar = parseFloat(product.descuento_efectivo ?? product.descuento ?? 0) || 0;
+                      const precioUnit = parseFloat(product.precioUnitario) || 0;
+                      const precioConDesc = product.precio_con_descuento ? product.precio_con_descuento : (descuentoPorMostrar > 0 ? (precioUnit * (1 - descuentoPorMostrar / 100)).toFixed(2) : precioUnit.toFixed(2));
+
+                      if (descuentoPorMostrar > 0) {
+                        return (
+                          <p className="product-price">
+                            <span style={{textDecoration: 'line-through', color: '#999', fontSize: '0.9rem', marginRight: '6px'}}>
+                              {precioUnit.toFixed(2)} €
+                            </span>
+                            <span style={{color: '#E85B4E', fontWeight: 'bold'}}>{parseFloat(precioConDesc).toFixed(2)} €</span>
+                            <span style={{marginLeft: '6px', background: '#E85B4E', color: '#fff', padding: '1px 6px', borderRadius: '10px', fontSize: '0.75rem'}}>
+                              -{descuentoPorMostrar.toFixed(0)}%
+                            </span>
+                          </p>
+                        );
+                      }
+
+                      return <p className="product-price">{precioUnit.toFixed(2)} €</p>;
+                    })()
+                  }
                   
                   {stockDisponible <= 5 && stockDisponible > 0 && (
                     <p className="stock-warning">¡Solo quedan {stockDisponible} unidades!</p>

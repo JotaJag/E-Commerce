@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import './components/Header.css';
 import Banner from './components/Banner';
@@ -18,7 +18,6 @@ import ColeccionesDestacadas from './components/ColeccionesDestacadas';
 import IniciarSesion from './components/IniciarSesion';
 import Registro from './components/Registro';
 import Carrito from './components/Carrito';
-import Pago from './components/Pago';
 import PagoExitoso from './components/PagoExitoso';
 import Profile from './components/Profile';
 import RutaProtegida from './components/RutaProtegida';
@@ -51,10 +50,12 @@ const AppContent = () => {
           <Route path="/busqueda" element={<ResultadosBusqueda />} />
           <Route path="/login" element={<IniciarSesion onNavigate={handleAuthNavigation} />} />
           <Route path="/register" element={<Registro onNavigate={handleAuthNavigation} />} />
-          <Route path="/carrito" element={<Carrito />} />
-          <Route path="/pago" element={<RutaProtegida />}>
-            <Route path="" element={<Pago />} />
+          {/* El carrito ahora actúa como la pantalla de finalizar compra (protegida) */}
+          <Route path="/carrito" element={<RutaProtegida />}>
+            <Route path="" element={<Carrito />} />
           </Route>
+          {/* Redirigir /pago a /carrito para conservar enlaces antiguos */}
+          <Route path="/pago" element={<Navigate to="/carrito" replace />} />
           <Route path="/pago-exitoso" element={<PagoExitoso />} />
           <Route path="/profile" element={<RutaProtegida />}>
             <Route path="" element={<Profile />} />

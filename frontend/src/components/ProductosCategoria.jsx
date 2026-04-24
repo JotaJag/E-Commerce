@@ -103,7 +103,29 @@ function ProductosCategoria() {
                 </div>
                 <div className="product-info">
                   <h2>{product.nombre}</h2>
-                  <p className="product-price">{product.precioUnitario} €</p>
+                  {
+                    (() => {
+                      const descuentoPorMostrar = parseFloat(product.descuento_efectivo ?? product.descuento ?? 0) || 0;
+                      const precioUnit = parseFloat(product.precioUnitario) || 0;
+                      const precioConDesc = product.precio_con_descuento ? product.precio_con_descuento : (descuentoPorMostrar > 0 ? (precioUnit * (1 - descuentoPorMostrar / 100)).toFixed(2) : precioUnit.toFixed(2));
+
+                      if (descuentoPorMostrar > 0) {
+                        return (
+                          <p className="product-price">
+                            <span style={{textDecoration: 'line-through', color: '#999', fontSize: '0.9rem', marginRight: '6px'}}>
+                              {precioUnit.toFixed(2)} €
+                            </span>
+                            <span style={{color: '#E85B4E', fontWeight: 'bold'}}>{parseFloat(precioConDesc).toFixed(2)} €</span>
+                            <span style={{marginLeft: '6px', background: '#E85B4E', color: '#fff', padding: '1px 6px', borderRadius: '10px', fontSize: '0.75rem'}}>
+                              -{descuentoPorMostrar.toFixed(0)}%
+                            </span>
+                          </p>
+                        );
+                      }
+
+                      return <p className="product-price">{precioUnit.toFixed(2)} €</p>;
+                    })()
+                  }
                   <div className="product-card-controls">
                     <div className="cantidad-control-card">
                       <button onClick={() => handleQuantityChange(product.idProducto, (quantities[product.idProducto] || 1) - 1)}>−</button>

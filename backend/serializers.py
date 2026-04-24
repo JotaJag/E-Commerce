@@ -39,7 +39,7 @@ class ColeccionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Coleccion
-        fields = ['id', 'nombre', 'descripcion', 'imagen', 'imagen_url']
+        fields = ['id', 'nombre', 'descripcion', 'imagen', 'imagen_url', 'descuento']
 
     def get_imagen_url(self, obj):
         if obj.imagen and hasattr(obj.imagen, 'url'):
@@ -52,10 +52,13 @@ class ProductoSerializer(serializers.ModelSerializer):
     stock = serializers.IntegerField(read_only=True)
     stock_reservado = serializers.SerializerMethodField()
     stock_disponible = serializers.SerializerMethodField()
+    # Calcular y exponer explícitamente los campos derivados para evitar valores faltantes
+    descuento_efectivo = serializers.SerializerMethodField()
+    precio_con_descuento = serializers.SerializerMethodField()
 
     class Meta:
         model = Producto
-        fields = ['idProducto', 'nombre', 'descripcion', 'precioUnitario', 'imagen', 'imagen_url', 'estado', 'marca', 'modelo', 'color', 'tipo', 'coleccion', 'coleccion_nombre', 'categoria', 'stock', 'stock_reservado', 'stock_disponible']
+        fields = ['idProducto', 'nombre', 'descripcion', 'precioUnitario', 'imagen', 'imagen_url', 'estado', 'marca', 'modelo', 'color', 'tipo', 'coleccion', 'coleccion_nombre', 'categoria', 'stock', 'stock_reservado', 'stock_disponible', 'descuento', 'descuento_efectivo', 'precio_con_descuento']
 
     def get_imagen_url(self, obj):
         if obj.imagen and hasattr(obj.imagen, 'url'):
@@ -81,6 +84,19 @@ class ProductoSerializer(serializers.ModelSerializer):
         except Exception:
             disponible = 0
         return max(0, disponible)
+
+    def get_descuento_efectivo(self, obj):
+        try:
+            return float(obj.descuento_efectivo or 0)
+        except Exception:
+            return 0.0
+
+    def get_precio_con_descuento(self, obj):
+        try:
+            # Asegurar que sea un número simple para el frontend
+            return float(obj.precio_con_descuento)
+        except Exception:
+            return float(obj.precioUnitario)
 
 class BannerSerializer(serializers.ModelSerializer):
     imagen_url = serializers.SerializerMethodField()
@@ -141,11 +157,12 @@ class PedidoSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Pedido
-        fields = ['idPedido', 'cliente', 'cliente_nombre', 'cliente_email', 'fechaPedido', 'fechaEntrega', 'direccionEntrega', 
-                  'ciudadEntrega', 'provinciaEntrega', 'codPostalEntrega', 'telefono', 
-                  'descuento', 'pagado', 'estado', 'estado_display', 'lineas', 'total', 
+        fields = ['idPedido', 'cliente', 'cliente_nombre', 'cliente_email', 'fechaPedido', 'fechaEntrega', 'direccionEntrega',
+                  'ciudadEntrega', 'provinciaEntrega', 'codPostalEntrega', 'telefono',
+                  'descuento', 'porcentaje_iva', 'pagado', 'estado', 'estado_display', 'lineas',
+                  'base_imponible', 'cuota_iva', 'total',
                   'stripe_session_id', 'stripe_payment_intent']
-        read_only_fields = ['total']
+        read_only_fields = ['base_imponible', 'cuota_iva', 'total']
 
 class LineaCarritoSerializer(serializers.ModelSerializer):
     producto = ProductoSerializer(read_only=True)

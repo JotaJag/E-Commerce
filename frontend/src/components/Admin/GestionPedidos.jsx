@@ -163,6 +163,8 @@ function GestionPedidos() {
               <p><strong>Dirección:</strong> {pedidoDetalle.direccionEntrega}, {pedidoDetalle.ciudadEntrega}, {pedidoDetalle.provinciaEntrega}</p>
               <p><strong>Código Postal:</strong> {pedidoDetalle.codPostalEntrega}</p>
               <p><strong>Teléfono:</strong> {pedidoDetalle.telefono}</p>
+              <p><strong>Base imponible:</strong> €{pedidoDetalle.base_imponible}</p>
+              <p><strong>IVA ({pedidoDetalle.porcentaje_iva}%):</strong> €{pedidoDetalle.cuota_iva}</p>
               <p><strong>Total:</strong> €{pedidoDetalle.total}</p>
               <p><strong>Estado:</strong> {pedidoDetalle.estado_display || pedidoDetalle.estado}</p>
               

@@ -24,7 +24,8 @@ function GestionColecciones() {
     const token = localStorage.getItem('token');
 
     // Si no hay imagen nueva en edición, eliminar el campo vacío
-    if (coleccionEditar && !formData.get('imagen').size) {
+    const imagenField = formData.get('imagen');
+    if (coleccionEditar && (!imagenField || (imagenField.size === 0))) {
       formData.delete('imagen');
     }
 
@@ -33,7 +34,8 @@ function GestionColecciones() {
         ? `http://localhost:8000/api/colecciones/${coleccionEditar.id}/`
         : 'http://localhost:8000/api/colecciones/';
       
-      const method = coleccionEditar ? 'PUT' : 'POST';
+      // Usar PATCH para edición parcial (no requerir enviar la imagen de nuevo)
+      const method = coleccionEditar ? 'PATCH' : 'POST';
 
       const response = await fetch(url, {
         method,
@@ -96,6 +98,7 @@ function GestionColecciones() {
             <th>Imagen</th>
             <th>Nombre</th>
             <th>Descripción</th>
+            <th>Descuento</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -120,6 +123,13 @@ function GestionColecciones() {
               <td>{coleccion.nombre}</td>
               <td style={{maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                 {coleccion.descripcion}
+              </td>
+              <td>
+                {parseFloat(coleccion.descuento) > 0 ? (
+                  <span className="admin-badge badge-pendiente">{parseFloat(coleccion.descuento).toFixed(0)}%</span>
+                ) : (
+                  <span style={{color: '#999'}}>—</span>
+                )}
               </td>
               <td className="table-actions">
                 <button 
@@ -170,12 +180,24 @@ function GestionColecciones() {
               </div>
               <div className="admin-form-group">
                 <label>Descripción *</label>
-                <textarea 
-                  name="descripcion" 
+                <textarea
+                  name="descripcion"
                   defaultValue={coleccionEditar?.descripcion}
                   required
                   rows="4"
                   placeholder="Describe la colección..."
+                />
+              </div>
+              <div className="admin-form-group">
+                <label>Descuento para toda la colección (%)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="descuento"
+                  defaultValue={coleccionEditar?.descuento || 0}
+                  min="0"
+                  max="100"
+                  placeholder="0 = sin descuento"
                 />
               </div>
               <div className="admin-form-group">

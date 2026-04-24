@@ -162,6 +162,7 @@ function GestionProductos() {
             <th>Imagen</th>
             <th>Nombre</th>
             <th>Precio</th>
+            <th>Descuento</th>
             <th>Stock</th>
             <th>Categoría</th>
             <th>Estado</th>
@@ -174,7 +175,27 @@ function GestionProductos() {
               <td>{producto.idProducto}</td>
               <td><img src={producto.imagen_url} alt={producto.nombre} /></td>
               <td>{producto.nombre}</td>
-              <td>€{producto.precioUnitario}</td>
+              <td>
+                {parseFloat(producto.descuento_efectivo) > 0 ? (
+                  <span>
+                    <span style={{textDecoration: 'line-through', color: '#999', marginRight: '4px'}}>€{producto.precioUnitario}</span>
+                    <span style={{color: '#E85B4E', fontWeight: 'bold'}}>€{producto.precio_con_descuento}</span>
+                  </span>
+                ) : (
+                  <span>€{producto.precioUnitario}</span>
+                )}
+              </td>
+              <td>
+                {parseFloat(producto.descuento_efectivo) > 0 ? (
+                  <span className="admin-badge badge-pendiente">
+                    {parseFloat(producto.descuento).toFixed(0) > 0
+                      ? `${parseFloat(producto.descuento).toFixed(0)}% propio`
+                      : `${parseFloat(producto.descuento_efectivo).toFixed(0)}% colección`}
+                  </span>
+                ) : (
+                  <span style={{color: '#999'}}>—</span>
+                )}
+              </td>
               <td>
                 <span className={`admin-badge ${
                   producto.stock === 0 ? 'badge-inactivo' :
@@ -266,12 +287,24 @@ function GestionProductos() {
                 </div>
                 <div className="admin-form-group">
                   <label>Precio *</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     step="0.01"
-                    name="precioUnitario" 
+                    name="precioUnitario"
                     defaultValue={productoEditar?.precioUnitario}
-                    required 
+                    required
+                  />
+                </div>
+                <div className="admin-form-group">
+                  <label>Descuento individual (%)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="descuento"
+                    defaultValue={productoEditar?.descuento || 0}
+                    min="0"
+                    max="100"
+                    placeholder="0 = sin descuento"
                   />
                 </div>
                 <div className="admin-form-group">

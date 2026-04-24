@@ -32,7 +32,7 @@ class ColeccionViewSet(viewsets.ModelViewSet):
     queryset = Coleccion.objects.all()
     serializer_class = ColeccionSerializer
     permission_classes = [AllowAny]
-    lookup_field = 'nombre'
+    # Usar el identificador por defecto (pk) para las rutas detalle
 
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all().order_by('-idProducto')

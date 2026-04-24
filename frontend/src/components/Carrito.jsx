@@ -1,149 +1,230 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js';
 import { ContextoCarrito } from '../context/ContextoCarrito';
 import { usarAutenticacion } from '../context/ContextoAutenticacion';
 import './Carrito.css';
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
 const Carrito = () => {
-    const { articulosCarrito, eliminarDelCarrito, actualizarCantidad, vaciarCarrito } = useContext(ContextoCarrito);
+    const { articulosCarrito, vaciarCarrito, actualizarCantidad, eliminarDelCarrito } = useContext(ContextoCarrito);
     const { user } = usarAutenticacion();
     const navigate = useNavigate();
-    const [productosStock, setProductosStock] = useState({});
 
-    useEffect(() => {
-        // Cargar stock disponible de los productos en el carrito
-        const cargarStock = async () => {
-            const stockMap = {};
-            for (const item of articulosCarrito) {
-                try {
-                    const response = await fetch(`http://localhost:8000/api/productos/${item.id}/`);
-                    if (response.ok) {
-                        const producto = await response.json();
-                        stockMap[item.id] = producto.stock_disponible || 0;
-                    }
-                } catch (error) {
-                }
+    const [procesando, setProcesando] = useState(false);
+    const [error, setError] = useState(null);
+
+    const calcularTotalSinDescuentos = () =>
+        articulosCarrito.reduce((acc, item) => acc + (item.precioOriginal ?? item.precio) * item.cantidad, 0);
+
+    const calcularAhorro = () =>
+        articulosCarrito.reduce((acc, item) => {
+            const original = item.precioOriginal ?? item.precio;
+            return acc + (original - item.precio) * item.cantidad;
+        }, 0);
+
+    const calcularTotal = () =>
+        articulosCarrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+
+    const calcularBaseImponible = () => (calcularTotal() / 1.21).toFixed(2);
+    const calcularIva = () => (calcularTotal() - calcularTotal() / 1.21).toFixed(2);
+
+    const hayDescuentos = () => articulosCarrito.some(item => item.descuentoEfectivo > 0);
+
+    const manejarPago = async () => {
+        setError(null);
+        setProcesando(true);
+
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setError('No estás autenticado. Por favor, inicia sesión.');
+                setProcesando(false);
+                return;
             }
-            setProductosStock(stockMap);
-        };
 
-        if (articulosCarrito.length > 0) {
-            cargarStock();
-        }
-    }, [articulosCarrito]);
+            const items = articulosCarrito.map(item => ({
+                id: item.id,
+                nombre: item.nombre,
+                descripcion: item.descripcion || '',
+                precio: item.precio,
+                precioOriginal: item.precioOriginal ?? item.precio,
+                descuentoEfectivo: item.descuentoEfectivo ?? 0,
+                cantidad: item.cantidad,
+                imagen: item.imagen || '',
+                marca: item.marca || '',
+                modelo: item.modelo || '',
+                color: item.color || '',
+                tipo: item.tipo || '',
+            }));
 
-    const handleActualizarCantidad = (item, nuevaCantidad) => {
-        const stockDisponible = productosStock[item.id] || 0;
-        
-        if (nuevaCantidad > stockDisponible) {
-            alert(`Solo hay ${stockDisponible} unidades disponibles de ${item.nombre}`);
-            return;
-        }
-        
-        actualizarCantidad({ idProducto: item.id }, nuevaCantidad);
-    };
+            const respuesta = await fetch('http://localhost:8000/api/crear-sesion-pago/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${token}`,
+                },
+                body: JSON.stringify({ items }),
+            });
 
-    const calculateTotal = () => {
-        return articulosCarrito.reduce((total, item) => total + item.precio * item.cantidad, 0).toFixed(2);
-    };
-
-    const calculateSubTotal = () => {
-        const totalConIva = articulosCarrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
-        const totalSinIva = totalConIva / 1.21;
-        return totalSinIva.toFixed(2);
-    };
-
-    const calculateTax = () => {
-        return (Number(calculateTotal()) - Number(calculateSubTotal())).toFixed(2);
-    };
-
-    const handleProcederPago = () => {
-        if (user) {
-            navigate('/pago');
-        } else {
-            navigate('/login');
+            if (respuesta.ok) {
+                const datos = await respuesta.json();
+                const stripe = await stripePromise;
+                if (!stripe) {
+                    setError('Error al cargar Stripe. Verifica la clave pública.');
+                    setProcesando(false);
+                    return;
+                }
+                const { error } = await stripe.redirectToCheckout({ sessionId: datos.sessionId });
+                if (error) setError(error.message);
+            } else {
+                const datosError = await respuesta.json();
+                setError(datosError.error || datosError.detail || 'Error al procesar el pedido.');
+            }
+        } catch {
+            setError('Error de conexión. Por favor, intenta de nuevo.');
+        } finally {
+            setProcesando(false);
         }
     };
 
     if (articulosCarrito.length === 0) {
         return (
-            <div className="carrito-vacio">
-                <h2>Tu Carrito de Compras</h2>
-                <p>Tu carrito está vacío.</p>
-                <Link to="/" className="btn-volver-tienda">Volver a la tienda</Link>
+            <div className="pago-vacio">
+                <h2>No hay artículos en tu carrito</h2>
+                <p>Agrega productos antes de proceder al pago.</p>
+                <button onClick={() => navigate('/')} className="btn-volver">Volver a la tienda</button>
             </div>
         );
     }
 
     return (
-        <div className="carrito-container">
-            <h2>Carrito de Compras</h2>
-            <div className="carrito-contenido">
-                <div className="carrito-items">
-                    {articulosCarrito.map((item) => {
-                        const stockDisponible = productosStock[item.id] || 0;
-                        const stockInsuficiente = item.cantidad > stockDisponible;
-                        
-                        return (
-                            <div key={item.id} className="carrito-item">
-                                <img src={item.imagen || '/placeholder.png'} alt={item.nombre} className="carrito-item-imagen" />
-                                <div className="carrito-item-details">
-                                    <h3>{item.nombre}</h3>
-                                    <p>Precio: {item.precio.toFixed(2)} €</p>
-                                    {stockInsuficiente && (
-                                        <p style={{color: '#E85B4E', fontSize: '0.9rem', fontWeight: 'bold'}}>
-                                            ⚠️ Solo quedan {stockDisponible} unidades disponibles
-                                        </p>
-                                    )}
-                                    {stockDisponible > 0 && !stockInsuficiente && stockDisponible <= 5 && (
-                                        <p style={{color: '#FF9800', fontSize: '0.9rem'}}>
-                                            Solo quedan {stockDisponible} unidades
+        <div className="pago-container">
+            <h1>Mi carrito</h1>
+
+            <div className="pago-contenido">
+                {/* Información sobre el proceso */}
+                <div className="pago-formulario">
+                    <h2>Resumen y pago</h2>
+                    {error && <div className="error-mensaje">{error}</div>}
+
+                    <div className="carrito-items">
+                        {articulosCarrito.map(item => {
+                            const precioUnit = parseFloat(item.precio) || 0;
+                            const descuento = parseFloat(item.descuentoEfectivo ?? 0) || 0;
+                            const subtotal = (precioUnit * (item.cantidad || 1));
+
+                            const aumentar = () => actualizarCantidad({ idProducto: item.id }, (item.cantidad || 1) + 1);
+                            const reducir = () => {
+                                const actual = item.cantidad || 1;
+                                if (actual <= 1) return;
+                                actualizarCantidad({ idProducto: item.id }, actual - 1);
+                            };
+                            const eliminar = () => {
+                                if (!confirm('¿Eliminar este artículo del carrito?')) return;
+                                eliminarDelCarrito({ idProducto: item.id });
+                            };
+
+                            return (
+                                <div key={item.id} className="carrito-item" style={{display: 'flex', alignItems: 'center'}}>
+                                    <img src={item.imagen || '/placeholder.png'} alt={item.nombre} className="carrito-item-imagen" />
+                                    <div className="carrito-item-details">
+                                        <h3>{item.nombre}</h3>
+                                        {descuento > 0 ? (
+                                            <p>
+                                                <span style={{textDecoration: 'line-through', color: '#999', marginRight: '6px'}}>{(item.precioOriginal ?? item.precio).toFixed(2)} €</span>
+                                                <span style={{color: '#E85B4E', fontWeight: 'bold'}}>{precioUnit.toFixed(2)} €</span>
+                                                <span style={{marginLeft: '6px', background: '#E85B4E', color: '#fff', padding: '1px 6px', borderRadius: '10px', fontSize: '0.75rem'}}>-{descuento.toFixed(0)}%</span>
+                                            </p>
+                                        ) : (
+                                            <p>Precio: {precioUnit.toFixed(2)} €</p>
+                                        )}
+                                    </div>
+                                    <div className="carrito-item-actions" style={{marginLeft: 'auto'}}>
+                                        <div className="cantidad-control">
+                                            <button onClick={reducir} disabled={(item.cantidad || 1) <= 1}>-</button>
+                                            <span>{item.cantidad}</span>
+                                            <button onClick={aumentar}>+</button>
+                                        </div>
+                                        <button onClick={eliminar} className="btn-eliminar">Eliminar</button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <button
+                        className="btn-confirmar-pago"
+                        onClick={manejarPago}
+                        disabled={procesando}
+                    >
+                        {procesando ? 'Redirigiendo a Stripe...' : 'Ir a pagar →'}
+                    </button>
+
+                    <p className="pago-seguro-nota">
+                        🔒 Pago 100% seguro procesado por Stripe. No almacenamos datos de tu tarjeta.
+                    </p>
+                </div>
+
+                {/* Resumen del pedido */}
+                <div className="pago-resumen">
+                    <h2>Resumen del Pedido</h2>
+
+                    <div className="resumen-items">
+                        {articulosCarrito.map((item) => (
+                            <div key={item.id} className="resumen-item">
+                                <img src={item.imagen} alt={item.nombre} />
+                                <div className="resumen-item-info">
+                                    <p className="resumen-item-nombre">{item.nombre}</p>
+                                    <p className="resumen-item-cantidad">Cantidad: {item.cantidad}</p>
+                                    {item.descuentoEfectivo > 0 && (
+                                        <p style={{ fontSize: '0.8rem', color: '#E85B4E' }}>
+                                            -{item.descuentoEfectivo.toFixed(0)}% descuento aplicado
                                         </p>
                                     )}
                                 </div>
-                                <div className="carrito-item-actions">
-                                    <div className="cantidad-control">
-                                        <button 
-                                            onClick={() => handleActualizarCantidad(item, item.cantidad - 1)} 
-                                            disabled={item.cantidad === 1}
-                                        >
-                                            -
-                                        </button>
-                                        <span>{item.cantidad}</span>
-                                        <button 
-                                            onClick={() => handleActualizarCantidad(item, item.cantidad + 1)}
-                                            disabled={item.cantidad >= stockDisponible}
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                    <button onClick={() => eliminarDelCarrito({ idProducto: item.id })} className="btn-eliminar">
-                                        Eliminar
-                                    </button>
+                                <div style={{ textAlign: 'right' }}>
+                                    {item.descuentoEfectivo > 0 && (
+                                        <p style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.85rem', margin: 0 }}>
+                                            {((item.precioOriginal ?? item.precio) * item.cantidad).toFixed(2)} €
+                                        </p>
+                                    )}
+                                    <p className="resumen-item-precio" style={{ margin: 0 }}>
+                                        {(item.precio * item.cantidad).toFixed(2)} €
+                                    </p>
                                 </div>
                             </div>
-                        );
-                    })}
+                        ))}
+                    </div>
+
+                    <div className="resumen-totales">
+                        {hayDescuentos() && (
+                            <>
+                                <div className="resumen-linea" style={{ color: '#999' }}>
+                                    <span>Precio sin descuentos:</span>
+                                    <span>{calcularTotalSinDescuentos().toFixed(2)} €</span>
+                                </div>
+                                <div className="resumen-linea" style={{ color: '#E85B4E', fontWeight: 'bold' }}>
+                                    <span>Ahorro total:</span>
+                                    <span>-{calcularAhorro().toFixed(2)} €</span>
+                                </div>
+                            </>
+                        )}
+                        <div className="resumen-linea">
+                            <span>Base imponible:</span>
+                            <span>{calcularBaseImponible()} €</span>
+                        </div>
+                        <div className="resumen-linea">
+                            <span>IVA (21%):</span>
+                            <span>{calcularIva()} €</span>
+                        </div>
+                        <div className="resumen-linea resumen-total">
+                            <span>Total:</span>
+                            <span>{calcularTotal().toFixed(2)} €</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div className="carrito-resumen">
-                <h3>Resumen del Pedido</h3>
-                <div className="resumen-linea">
-                    <span>Subtotal: </span>
-                    <span>{calculateSubTotal()} €</span>
-                </div>
-                <div className="resumen-linea">
-                    <span>Impuestos: </span>
-                    <span>{calculateTax()} €</span>
-                </div>
-                <div className="resumen-total">
-                    <span>Total: </span>
-                    <span>{calculateTotal()} €</span>
-                </div>
-                <button onClick={handleProcederPago} className="btn-comprar">
-                    Proceder al Pago
-                </button>
-                <button onClick={vaciarCarrito} className="btn-vaciar">Vaciar Carrito</button>
             </div>
         </div>
     );

@@ -10,12 +10,29 @@ class Producto(models.Model):
     imagen = models.ImageField(upload_to='productos/')
     estado = models.BooleanField(default=True)
     stock = models.PositiveIntegerField(default=0)
+    descuento = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True, blank=True)
     marca = models.CharField(max_length=100, blank=True, null=True)
     modelo = models.CharField(max_length=100, blank=True, null=True)
     coleccion = models.ForeignKey('Coleccion', on_delete=models.SET_NULL, null=True, blank=True)
     color = models.CharField(max_length=50, blank=True, null=True)
     tipo = models.CharField(max_length=50, blank=True, null=True)
+
+    @property
+    def descuento_efectivo(self):
+        if self.descuento and self.descuento > 0:
+            return self.descuento
+        if self.coleccion and self.coleccion.descuento > 0:
+            return self.coleccion.descuento
+        return 0
+
+    @property
+    def precio_con_descuento(self):
+        from decimal import Decimal
+        d = self.descuento_efectivo
+        if d > 0:
+            return round(self.precioUnitario * (1 - d / Decimal('100')), 2)
+        return self.precioUnitario
 
     class Meta:
         db_table = 'producto'
@@ -61,6 +78,7 @@ class Coleccion(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     imagen = models.ImageField(upload_to='colecciones/')
+    descuento = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
     class Meta:
         db_table = 'coleccion'
@@ -126,6 +144,7 @@ class Pedido(models.Model):
     codPostalEntrega = models.CharField(max_length=10)
     telefono = models.CharField(max_length=15, blank=True, default='')
     descuento = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    porcentaje_iva = models.DecimalField(max_digits=5, decimal_places=2, default=21)
     pagado = models.BooleanField(default=False)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
     stripe_session_id = models.CharField(max_length=255, blank=True, null=True)
@@ -139,9 +158,22 @@ class Pedido(models.Model):
         return f"Pedido #{self.idPedido} de {self.cliente.usuario.email}"
 
     @property
+    def subtotal_bruto(self):
+        return sum(linea.subtotal for linea in self.lineas.all())
+
+    @property
     def total(self):
-        total_bruto = sum(linea.subtotal for linea in self.lineas.all())
-        return total_bruto - self.descuento
+        return self.subtotal_bruto - self.descuento
+
+    @property
+    def base_imponible(self):
+        from decimal import Decimal
+        divisor = 1 + self.porcentaje_iva / Decimal('100')
+        return round(self.total / divisor, 2)
+
+    @property
+    def cuota_iva(self):
+        return round(self.total - self.base_imponible, 2)
 
 class LineaPedido(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='lineas')

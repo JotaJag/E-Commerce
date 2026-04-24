@@ -104,7 +104,31 @@ function FichaProducto({ productId, onClose }) {
           )}
           
           <div className="ficha-precio">
-            <span className="precio">{product.precioUnitario} €</span>
+            {
+              (() => {
+                const descuentoPorMostrar = parseFloat(product.descuento_efectivo ?? product.descuento ?? 0) || 0;
+                const precioUnit = parseFloat(product.precioUnitario) || 0;
+                const precioConDesc = product.precio_con_descuento ? product.precio_con_descuento : (descuentoPorMostrar > 0 ? (precioUnit * (1 - descuentoPorMostrar / 100)).toFixed(2) : precioUnit.toFixed(2));
+
+                if (descuentoPorMostrar > 0) {
+                  return (
+                    <>
+                      <span className="precio-original" style={{textDecoration: 'line-through', color: '#999', fontSize: '1rem', marginRight: '8px'}}>
+                        {precioUnit.toFixed(2)} €
+                      </span>
+                      <span className="precio" style={{color: '#E85B4E'}}>
+                        {parseFloat(precioConDesc).toFixed(2)} €
+                      </span>
+                      <span className="descuento-badge" style={{marginLeft: '8px', background: '#E85B4E', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.85rem'}}>
+                        -{descuentoPorMostrar.toFixed(0)}%
+                      </span>
+                    </>
+                  );
+                }
+
+                return <span className="precio">{precioUnit.toFixed(2)} €</span>;
+              })()
+            }
             <span className="unidad">/ud</span>
           </div>
 
