@@ -210,10 +210,10 @@ const Carrito = () => {
 
                     <button
                         className="btn-confirmar-pago"
-                        onClick={manejarPago}
+                        onClick={user ? manejarPago : () => navigate('/login')}
                         disabled={procesando}
                     >
-                        {procesando ? 'Redirigiendo a Stripe...' : 'Ir a pagar →'}
+                        {procesando ? 'Redirigiendo a Stripe...' : (user ? 'Ir a pagar →' : 'Inicia sesión para continuar con el pago')}
                     </button>
 
                     <p className="pago-seguro-nota">

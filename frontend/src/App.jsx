@@ -56,11 +56,7 @@ const AppContent = () => {
           <Route path="/busqueda" element={<ResultadosBusqueda />} />
           <Route path="/login" element={<IniciarSesion onNavigate={handleAuthNavigation} />} />
           <Route path="/register" element={<Registro onNavigate={handleAuthNavigation} />} />
-          {/* El carrito ahora actúa como la pantalla de finalizar compra (protegida) */}
-          <Route path="/carrito" element={<RutaProtegida />}>
-            <Route path="" element={<Carrito />} />
-          </Route>
-          {/* Redirigir /pago a /carrito para conservar enlaces antiguos */}
+          <Route path="/carrito" element={<Carrito />} />
           <Route path="/pago" element={<Navigate to="/carrito" replace />} />
           <Route path="/pago-exitoso" element={<PagoExitoso />} />
           <Route path="/profile" element={<RutaProtegida />}>
