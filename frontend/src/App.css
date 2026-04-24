@@ -24,3 +24,25 @@
     min-height: calc(100vh - 145px);
   }
 }
+
+/* Home sections subtle card styling */
+.home-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.home-section {
+  background: #ffffff;
+  border: 1px solid rgba(16,24,40,0.06);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.04);
+  padding: 18px;
+}
+
+@media (max-width: 768px) {
+  .home-sections { padding: 12px; gap: 14px; }
+  .home-section { padding: 12px; border-radius: 8px; }
+}

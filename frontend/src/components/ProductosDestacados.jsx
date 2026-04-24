@@ -83,6 +83,9 @@ function ProductosDestacados() {
   };
 
   const productosActivos = products.filter(product => product.estado);
+  const isScrollable = productosActivos.length > 6;
+  const MAX_SCROLLABLE = 18;
+  const visibleCount = isScrollable ? Math.min(productosActivos.length, MAX_SCROLLABLE) : Math.min(productosActivos.length, LIMITE_PRODUCTOS);
 
   if (productosActivos.length === 0) {
     return null;
@@ -102,8 +105,8 @@ function ProductosDestacados() {
 
       </div>
       
-      <div className="product-list">
-        {productosActivos.slice(0, LIMITE_PRODUCTOS).map(product => {
+      <div className={`product-list ${isScrollable ? 'scrollable' : ''}`}>
+        {productosActivos.slice(0, visibleCount).map(product => {
           const isAdding = addingProductId === product.idProducto;
           const stockDisponible = getStockDisponibleReal(product);
           return (

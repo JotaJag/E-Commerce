@@ -71,19 +71,67 @@ function ResultadosBusqueda() {
 
   const busqueda = searchParams.get('q');
   
+  // Normalizar texto: eliminar diacríticos y pasar a minúsculas
+  const normalize = (s) => (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  // Levenshtein para similitud (fuzzy)
+  const levenshtein = (a = '', b = '') => {
+    const al = a.length, bl = b.length;
+    if (al === 0) return bl;
+    if (bl === 0) return al;
+    const v0 = new Array(bl + 1).fill(0);
+    const v1 = new Array(bl + 1).fill(0);
+    for (let j = 0; j <= bl; j++) v0[j] = j;
+    for (let i = 0; i < al; i++) {
+      v1[0] = i + 1;
+      for (let j = 0; j < bl; j++) {
+        const cost = a[i] === b[j] ? 0 : 1;
+        v1[j + 1] = Math.min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
+      }
+      for (let j = 0; j <= bl; j++) v0[j] = v1[j];
+    }
+    return v1[bl];
+  };
+
+  const similarity = (s1, s2) => {
+    const a = (s1 || '').toString();
+    const b = (s2 || '').toString();
+    const maxLen = Math.max(a.length, b.length);
+    if (maxLen === 0) return 1;
+    const dist = levenshtein(a, b);
+    return 1 - dist / maxLen;
+  };
+
+  const FUZZ_THRESHOLD = 0.85;
+
   const productosFiltrados = products.filter(product => {
     if (!product.estado) return false;
     if (!busqueda) return false;
-    
-    const busquedaLower = busqueda.toLowerCase();
-    return (
-      product.nombre.toLowerCase().includes(busquedaLower) ||
-      product.descripcion.toLowerCase().includes(busquedaLower) ||
-      (product.marca && product.marca.toLowerCase().includes(busquedaLower)) ||
-      (product.modelo && product.modelo.toLowerCase().includes(busquedaLower)) ||
-      (product.tipo && product.tipo.toLowerCase().includes(busquedaLower)) ||
-      (product.color && product.color.toLowerCase().includes(busquedaLower))
-    );
+
+    const q = normalize(busqueda);
+
+    const fields = [product.nombre, product.descripcion, product.marca, product.modelo, product.tipo, product.color];
+    for (const f of fields) {
+      const nf = normalize(f || '');
+      if (!nf) continue;
+      if (nf.includes(q)) return true;
+
+      if (similarity(nf, q) >= FUZZ_THRESHOLD) return true;
+
+      const tokens = nf.split(/\s+|[^a-z0-9]+/).filter(Boolean);
+      for (const t of tokens) {
+        if (similarity(t, q) >= FUZZ_THRESHOLD) return true;
+      }
+
+      const qlen = q.length;
+      for (let L = Math.max(1, qlen - 1); L <= qlen + 1; L++) {
+        if (L > nf.length) continue;
+        for (let i = 0; i + L <= nf.length; i++) {
+          const sub = nf.substring(i, i + L);
+          if (similarity(sub, q) >= FUZZ_THRESHOLD) return true;
+        }
+      }
+    }
+    return false;
   });
 
   return (

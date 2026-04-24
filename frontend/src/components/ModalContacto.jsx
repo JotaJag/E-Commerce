@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { usarAutenticacion } from '../context/ContextoAutenticacion';
 import './ModalContacto.css';
 
 const MAX_MENSAJE = 500;
@@ -12,6 +13,8 @@ function ModalContacto({ onCerrar }) {
   });
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [errors, setErrors] = useState({});
+  const { user } = usarAutenticacion();
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -27,14 +30,47 @@ function ModalContacto({ onCerrar }) {
     };
   }, [onCerrar]);
 
+  // Prefill nombre/email if usuario autenticado
+  useEffect(() => {
+    if (!user) return;
+    setFormData(prev => {
+      const nombreActual = prev.nombre && prev.nombre.trim().length > 0;
+      const emailActual = prev.email && prev.email.trim().length > 0;
+      const nombreUsuario = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+      return {
+        ...prev,
+        nombre: nombreActual ? prev.nombre : (nombreUsuario || prev.nombre),
+        email: emailActual ? prev.email : (user.email || prev.email),
+      };
+    });
+  }, [user]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'mensaje' && value.length > MAX_MENSAJE) return;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: undefined }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newErrors = {};
+    if (!formData.nombre || formData.nombre.trim().length === 0) newErrors.nombre = 'El nombre es obligatorio.';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailRegex.test(formData.email)) newErrors.email = 'Introduce un email válido.';
+    if (!formData.asunto || formData.asunto.trim().length === 0) newErrors.asunto = 'Selecciona un motivo.';
+    if (!formData.mensaje || formData.mensaje.trim().length === 0) newErrors.mensaje = 'El mensaje no puede estar vacío.';
+    if (formData.mensaje && formData.mensaje.length > MAX_MENSAJE) newErrors.mensaje = `Máximo ${MAX_MENSAJE} caracteres.`;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      // focus first error
+      const firstKey = Object.keys(newErrors)[0];
+      const el = document.getElementById(firstKey);
+      if (el) el.focus();
+      return;
+    }
+
     setEnviando(true);
 
     // Simulación de envío (aquí integrarías con tu backend)
@@ -74,7 +110,7 @@ function ModalContacto({ onCerrar }) {
 
             <form onSubmit={handleSubmit} className="modal-contacto-form" noValidate>
               <div className="form-fila">
-                <div className="form-grupo">
+                <div className={`form-grupo ${errors.nombre ? 'input-error' : ''}`}>
                   <label htmlFor="nombre">Nombre</label>
                   <input
                     type="text"
@@ -85,10 +121,12 @@ function ModalContacto({ onCerrar }) {
                     required
                     placeholder="Tu nombre"
                     autoComplete="name"
+                      aria-invalid={errors.nombre ? 'true' : 'false'}
                   />
+                    {errors.nombre && <div className="error-text">{errors.nombre}</div>}
                 </div>
 
-                <div className="form-grupo">
+                <div className={`form-grupo ${errors.email ? 'input-error' : ''}`}>
                   <label htmlFor="email">Email</label>
                   <input
                     type="email"
@@ -99,11 +137,13 @@ function ModalContacto({ onCerrar }) {
                     required
                     placeholder="tu@email.com"
                     autoComplete="email"
+                    aria-invalid={errors.email ? 'true' : 'false'}
                   />
+                  {errors.email && <div className="error-text">{errors.email}</div>}
                 </div>
               </div>
 
-              <div className="form-grupo">
+              <div className={`form-grupo ${errors.asunto ? 'input-error' : ''}`}>
                 <label htmlFor="asunto">Motivo de contacto</label>
                 <select
                   id="asunto"
@@ -111,6 +151,7 @@ function ModalContacto({ onCerrar }) {
                   value={formData.asunto}
                   onChange={handleChange}
                   required
+                  aria-invalid={errors.asunto ? 'true' : 'false'}
                 >
                   <option value="" disabled>Selecciona una opción...</option>
                   <option value="consulta-producto">Consulta sobre un producto</option>
@@ -120,9 +161,10 @@ function ModalContacto({ onCerrar }) {
                   <option value="sugerencia">Sugerencia o mejora</option>
                   <option value="otro">Otro</option>
                 </select>
+                {errors.asunto && <div className="error-text">{errors.asunto}</div>}
               </div>
 
-              <div className="form-grupo">
+              <div className={`form-grupo ${errors.mensaje ? 'input-error' : ''}`}>
                 <label htmlFor="mensaje">Mensaje</label>
                 <textarea
                   id="mensaje"
@@ -132,10 +174,12 @@ function ModalContacto({ onCerrar }) {
                   required
                   rows="5"
                   placeholder="Escribe aquí tu mensaje..."
+                  aria-invalid={errors.mensaje ? 'true' : 'false'}
                 />
                 <span className={`char-contador ${formData.mensaje.length >= MAX_MENSAJE * 0.9 ? 'char-contador--limite' : ''}`}>
                   {formData.mensaje.length}/{MAX_MENSAJE}
                 </span>
+                {errors.mensaje && <div className="error-text">{errors.mensaje}</div>}
               </div>
 
               <button

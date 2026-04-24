@@ -42,7 +42,13 @@ const AppContent = () => {
       <ScrollToTop />
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<><Banner /><ColeccionesDestacadas /><ProductosDestacados /></>} />
+          <Route path="/" element={
+            <div className="home-sections">
+              <section className="home-section"><Banner /></section>
+              <section className="home-section"><ColeccionesDestacadas /></section>
+              <section className="home-section"><ProductosDestacados /></section>
+            </div>
+          } />
           <Route path="/productos" element={<Productos />} />
           <Route path="/categoria/:categoriaId" element={<ProductosCategoria />} />
           <Route path="/colecciones" element={<Colecciones />} />
