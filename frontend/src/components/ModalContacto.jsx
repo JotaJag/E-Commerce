@@ -73,14 +73,29 @@ function ModalContacto({ onCerrar }) {
 
     setEnviando(true);
 
-    // Simulación de envío (aquí integrarías con tu backend)
-    setTimeout(() => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/auth/contacto/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar el mensaje');
+      }
+
       setEnviando(false);
       setEnviado(true);
       setTimeout(() => {
         onCerrar();
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      console.error('Error:', error);
+      setEnviando(false);
+      setErrors({ mensaje: 'Hubo un error al enviar el mensaje. Inténtalo de nuevo más tarde.' });
+    }
   };
 
   const handleOverlayClick = (e) => {

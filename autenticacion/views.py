@@ -37,9 +37,7 @@ class LoginAPI(generics.GenericAPIView):
             return Response({"error": "Credenciales inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class ProfileView(generics.RetrieveUpdateAPIView):
-    """
-    Retrieve or update the profile of the currently authenticated user.
-    """
+    
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -155,3 +153,36 @@ class PasswordResetConfirmAPI(generics.GenericAPIView):
             return Response({"message": "Contraseña restablecida correctamente."}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "El enlace no es válido o ha expirado."}, status=status.HTTP_400_BAD_REQUEST)
+
+class ContactoAPIView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        nombre = request.data.get('nombre')
+        email = request.data.get('email')
+        asunto = request.data.get('asunto')
+        mensaje = request.data.get('mensaje')
+
+        if not all([nombre, email, asunto, mensaje]):
+            return Response({'error': 'Todos los campos son obligatorios.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            send_mail(
+                subject=f'Nuevo mensaje de contacto: {asunto}',
+                message=f'Nombre: {nombre}\nEmail: {email}\nAsunto: {asunto}\n\nMensaje:\n{mensaje}',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.EMAIL_HOST_USER],
+                fail_silently=False,
+            )
+
+            send_mail(
+                subject='Hemos recibido tu mensaje - E-Commerce',
+                message=f'Hola {nombre},\n\nHemos recibido tu mensaje y nos pondremos en contacto contigo lo antes posible.\n\nTu mensaje:\n{mensaje}\n\nSaludos,\nEl equipo de E-Commerce',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+            return Response({'message': 'Mensaje enviado exitosamente.'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': 'Hubo un error al enviar el mensaje.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
