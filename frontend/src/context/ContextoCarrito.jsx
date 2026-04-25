@@ -21,6 +21,7 @@ const formatearProducto = (producto, cantidad) => ({
 
 export const ProveedorCarrito = ({ children }) => {
     const [articulosCarrito, setArticulosCarrito] = useState([]);
+    const [carritoSidebarAbierto, setCarritoSidebarAbierto] = useState(false);
 
     const [estaAutenticado, setEstaAutenticado] = useState(!!localStorage.getItem('token'));
     const [cargando, setCargando] = useState(false);
@@ -198,6 +199,7 @@ export const ProveedorCarrito = ({ children }) => {
                 return [...articulosPrevios, formatearProducto(producto, cantidad)];
             });
         }
+        setCarritoSidebarAbierto(true);
     };
 
     const eliminarDelCarrito = async (producto) => {
@@ -234,6 +236,8 @@ export const ProveedorCarrito = ({ children }) => {
         actualizarCantidad,
         vaciarCarrito,
         manejarLoginExitoso,
+        carritoSidebarAbierto,
+        setCarritoSidebarAbierto,
     };
 
     return (

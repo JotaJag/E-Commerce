@@ -213,6 +213,10 @@
   display: inline-flex;
   align-items: center;
   padding: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
 }
 
 .cart-icon {
