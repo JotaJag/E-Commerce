@@ -13,3 +13,4 @@ local_settings.py
 
 frontend/.env
 frontend/.env
+/media
