@@ -118,6 +118,16 @@ STRIPE_CANCEL_URL=http://localhost:5173/pago
 
 # Frontend
 VITE_STRIPE_PUBLIC_KEY=pk_test_...
+
+# Configuración E-mail
+EMAIL_BACKEND=
+EMAIL_HOST=
+EMAIL_PORT=
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+DEFAULT_FROM_EMAIL=
+FRONTEND_URL=http://localhost:5173
 ```
 
 ---
