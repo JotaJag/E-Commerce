@@ -1,6 +1,6 @@
 # E-Commerce — Trabajo de Fin de Grado (DAW)
 
-Aplicación de comercio electrónico full-stack desarrollada como Trabajo de Fin de Grado del Ciclo Superior de Desarrollo de Aplicaciones Web. Incluye catálogo de productos, carrito de compra, pasarela de pago con Stripe y panel de administración.
+Aplicación de comercio electrónico full-stack desarrollada como Trabajo de Fin de Grado del Ciclo Superior de Desarrollo de Aplicaciones Web. Incluye catálogo de productos, carrito de compra, pasarela de pago con Stripe, gestión de pedidos, autenticación de usuarios, envío de notificaciones por e-mail y panel de administración.
 
 ---
 
@@ -10,14 +10,17 @@ Aplicación de comercio electrónico full-stack desarrollada como Trabajo de Fin
 | Tecnología | Versión |
 |---|---|
 | Python | 3.12 |
-| Django | 6.0 |
-| Django REST Framework | última |
-| Django-Knox (autenticación) | última |
+| Django | última versión |
+| Django REST Framework | última versión |
+| Django-Knox (autenticación) | última versión |
 | PostgreSQL | 17 |
-| Stripe | última |
-| Pillow | última |
-| django-cors-headers | última |
-| Django Jazzmin (admin) | última |
+| Stripe | última versión |
+| Pillow | última versión |
+| django-cors-headers | última versión |
+| Django Jazzmin (admin) | última versión |
+| python-dotenv | última versión |
+| pytest + pytest-django | última versión |
+| coverage | 7.4.0 |
 
 ### Frontend
 | Tecnología | Versión |
@@ -26,6 +29,7 @@ Aplicación de comercio electrónico full-stack desarrollada como Trabajo de Fin
 | Vite | 7.2.4 |
 | React Router DOM | 6.22.3 |
 | Stripe.js SDK | 3.0.6 |
+| Vitest | 4.1.5 |
 
 ---
 
