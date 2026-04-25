@@ -64,15 +64,15 @@ const IniciarSesion = ({ onNavigate }) => {
                     <button type="submit" className="form-button">Acceder</button>
                 </form>
                 <p className="switch-form-link" style={{ marginTop: '10px' }}>
-                    <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('recuperar-password'); }}>
+                    <button type="button" className="link-button" onClick={() => onNavigate('recuperar-password')}>
                         ¿Olvidaste tu contraseña?
-                    </a>
+                    </button>
                 </p>
                 <p className="switch-form-link">
                     ¿No tienes una cuenta?{' '}
-                    <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('register'); }}>
+                    <button type="button" className="link-button" onClick={() => onNavigate('register')}>
                         Regístrate
-                    </a>
+                    </button>
                 </p>
             </div>
         </div>

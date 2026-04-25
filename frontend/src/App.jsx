@@ -40,9 +40,10 @@ const AppContent = () => {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">Saltar al contenido principal</a>
       <Header />
       <ScrollToTop />
-      <main className="main-content">
+      <main id="main-content" className="main-content">
         <Routes>
           <Route path="/" element={
             <div className="home-sections">

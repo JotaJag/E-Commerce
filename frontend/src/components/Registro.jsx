@@ -118,9 +118,9 @@ const Registro = ({ onNavigate }) => {
                 </form>
                 <p className="switch-form-link">
                     ¿Ya tienes una cuenta?{' '}
-                    <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('login'); }}>
+                    <button type="button" className="link-button" onClick={() => onNavigate('login')}>
                         Accede
-                    </a>
+                    </button>
                 </p>
             </div>
         </div>

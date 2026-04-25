@@ -165,22 +165,25 @@ function FichaProducto({ productId, onClose }) {
             <div className="cantidad-selector">
               <label htmlFor="cantidad">Cantidad:</label>
               <div className="cantidad-control">
-                <button 
+                <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   disabled={getStockDisponibleReal() === 0}
+                  aria-label="Reducir cantidad"
                 >−</button>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   id="cantidad"
-                  value={quantity} 
+                  value={quantity}
                   onChange={(e) => setQuantity(Math.max(1, Math.min(parseInt(e.target.value) || 1, getStockDisponibleReal())))}
                   min="1"
                   max={getStockDisponibleReal()}
                   disabled={getStockDisponibleReal() === 0}
+                  aria-label="Cantidad"
                 />
-                <button 
+                <button
                   onClick={() => setQuantity(Math.min(quantity + 1, getStockDisponibleReal()))}
                   disabled={getStockDisponibleReal() === 0 || quantity >= getStockDisponibleReal()}
+                  aria-label="Aumentar cantidad"
                 >+</button>
               </div>
             </div>

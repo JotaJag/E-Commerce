@@ -140,14 +140,16 @@ function Productos() {
                   )}
                   <div className="product-card-controls">
                     <div className="cantidad-control-card">
-                      <button 
+                      <button
                         onClick={() => handleQuantityChange(product.idProducto, (quantities[product.idProducto] || 1) - 1)}
                         disabled={stockDisponible === 0}
+                        aria-label="Reducir cantidad"
                       >−</button>
-                      <span>{quantities[product.idProducto] || 1}</span>
-                      <button 
+                      <span aria-live="polite" aria-label={`Cantidad: ${quantities[product.idProducto] || 1}`}>{quantities[product.idProducto] || 1}</span>
+                      <button
                         onClick={() => handleQuantityChange(product.idProducto, (quantities[product.idProducto] || 1) + 1)}
                         disabled={stockDisponible === 0 || (quantities[product.idProducto] || 1) >= stockDisponible}
+                        aria-label="Aumentar cantidad"
                       >+</button>
                     </div>
                     <button

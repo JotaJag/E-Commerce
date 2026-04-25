@@ -14,15 +14,13 @@ const Footer = () => {
           <li><Link to="/politica-privacidad">Política de Privacidad</Link></li>
           <li><Link to="/terminos-condiciones">Términos y Condiciones</Link></li>
           <li>
-            <a 
-              href="#" 
-              onClick={(e) => {
-                e.preventDefault();
-                setMostrarContacto(true);
-              }}
+            <button
+              type="button"
+              className="link-button"
+              onClick={() => setMostrarContacto(true)}
             >
               Contacto
-            </a>
+            </button>
           </li>
         </ul>
         <p>&copy; 2026 TypeVibe86. Todos los derechos reservados.</p>

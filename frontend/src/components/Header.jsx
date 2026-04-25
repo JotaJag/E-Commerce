@@ -31,13 +31,18 @@ const Header = () => {
         setShowUserMenu(false);
       }
     };
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') setShowUserMenu(false);
+    };
 
     if (showUserMenu) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscape);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [showUserMenu]);
 
@@ -73,15 +78,17 @@ const Header = () => {
           </h1>
         </div>
         
-        <form className="search-bar" onSubmit={handleSearch}>
+        <form className="search-bar" onSubmit={handleSearch} role="search">
+          <label htmlFor="search-input" className="visually-hidden">Buscar productos</label>
           <input
+            id="search-input"
             type="text"
             placeholder="Buscar productos..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
           />
-          <button type="submit" className="search-btn">
+          <button type="submit" className="search-btn" aria-label="Buscar">
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
               width="16" 
@@ -99,7 +106,13 @@ const Header = () => {
             <li className="user-menu-container">
               {user ? (
                 <div className="user-menu-wrapper" ref={userMenuRef}>
-                  <button onClick={toggleUserMenu} className="user-icon-button">
+                  <button
+                    onClick={toggleUserMenu}
+                    className="user-icon-button"
+                    aria-label="Menú de usuario"
+                    aria-expanded={showUserMenu}
+                    aria-haspopup="true"
+                  >
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
                       width="24" 
@@ -128,7 +141,7 @@ const Header = () => {
                   )}
                 </div>
               ) : (
-                <Link to="/login" className="user-icon-button">
+                <Link to="/login" className="user-icon-button" aria-label="Iniciar sesión">
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     width="24" 

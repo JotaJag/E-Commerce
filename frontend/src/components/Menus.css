@@ -227,28 +227,86 @@
         display: none;
     }
 
-    /* Submenús en modo móvil */
+    /* Flecha del acordeón: posición absoluta para no alterar el layout del link */
+    .top-menu ul li.has-submenu > a {
+        position: relative;
+        padding-right: 44px;
+    }
+
+    .submenu-arrow {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        color: #aaa;
+        transition: transform 0.25s ease, color 0.2s ease;
+        pointer-events: none;
+    }
+
+    .submenu-arrow svg {
+        transition: transform 0.25s ease;
+    }
+
+    .submenu-arrow.open {
+        color: #E85B4E;
+    }
+
+    .submenu-arrow.open svg {
+        transform: rotate(180deg);
+    }
+
+    /* Submenús en modo móvil - acordeón con max-height para evitar saltos */
     .top-menu .submenu {
         position: static;
         box-shadow: none;
-        background-color: rgba(232, 91, 78, 0.08);
+        background-color: transparent;
         min-width: auto;
-        display: block;
-        border-left: 3px solid #E85B4E;
-        margin-left: 10px;
+        max-height: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        transition: max-height 0.28s ease;
+    }
+
+    .top-menu .submenu.submenu-open {
+        max-height: 600px;
+    }
+
+    .top-menu .submenu li {
+        border-bottom: none;
+        border-top: 1px solid rgba(124, 124, 124, 0.12);
     }
 
     .top-menu .submenu li a {
-        padding: 12px 20px 12px 40px;
+        padding: 12px 20px 12px 32px;
         font-size: 0.9rem;
-    }
-
-    .top-menu .submenu li:hover a {
-        background-color: rgba(232, 91, 78, 0.15);
-    }
-
-    .top-menu li:hover .submenu {
+        color: #666;
         display: block;
+    }
+
+    .top-menu .submenu li a::before {
+        content: '·';
+        margin-right: 8px;
+        color: #E85B4E;
+        font-size: 1.4rem;
+        line-height: 0;
+        vertical-align: middle;
+    }
+
+    .top-menu .submenu li a:hover {
+        color: #E85B4E;
+        background-color: rgba(232, 91, 78, 0.06);
+    }
+
+    /* Desactivar apertura por hover en móvil */
+    .top-menu li:hover .submenu {
+        max-height: 0;
+    }
+
+    .top-menu li:hover .submenu.submenu-open {
+        max-height: 600px;
     }
 }
 
@@ -279,7 +337,7 @@
     }
 
     .top-menu .submenu li a {
-        padding: 11px 15px 11px 35px;
+        padding: 11px 15px 11px 28px;
         font-size: 0.85rem;
     }
 

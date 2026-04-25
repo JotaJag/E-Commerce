@@ -65,7 +65,7 @@ const Banner = () => {
       }}
     >
       <div className="banner-overlay"></div>
-      <div className="banner-item">
+      <div className="banner-item" aria-live="polite" aria-atomic="true">
         <div className="banner-content">
           <h2>{currentBanner.titulo}</h2>
           <p>{currentBanner.descripcion}</p>
@@ -84,15 +84,18 @@ const Banner = () => {
       
       {banners.length > 1 && (
         <>
-          <button className="banner-btn prev" onClick={prevBanner}>❮</button>
-          <button className="banner-btn next" onClick={nextBanner}>❯</button>
-          
-          <div className="banner-indicators">
+          <button className="banner-btn prev" onClick={prevBanner} aria-label="Banner anterior">❮</button>
+          <button className="banner-btn next" onClick={nextBanner} aria-label="Banner siguiente">❯</button>
+
+          <div className="banner-indicators" role="tablist" aria-label="Seleccionar banner">
             {banners.map((_, index) => (
               <button
                 key={index}
                 className={`indicator ${index === currentIndex ? 'active' : ''}`}
                 onClick={() => setCurrentIndex(index)}
+                role="tab"
+                aria-selected={index === currentIndex}
+                aria-label={`Banner ${index + 1} de ${banners.length}`}
               />
             ))}
           </div>
