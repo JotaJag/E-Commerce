@@ -1,0 +1,15 @@
+# Ignore environment files with secrets
+.env
+.env.prod
+frontend/.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Django
+*.log
+local_settings.py
+
+frontend/.env
+frontend/.env

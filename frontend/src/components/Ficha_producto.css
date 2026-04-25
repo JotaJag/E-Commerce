@@ -1,0 +1,412 @@
+.ficha-container {
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.btn-volver {
+  background-color: #55B2B6;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+  background-color: #3a7f83;
+  transform: translateX(-5px);
+}
+
+.ficha-producto {
+  display: grid;
+  grid-template-columns: 40% auto;
+  gap: 40px;
+  background: white;
+  padding: 30px;
+}
+
+.ficha-imagen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.ficha-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.ficha-imagen:hover img {
+  transform: scale(1.05);
+}
+
+.zoomed-image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  padding: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.zoomed-image-modal img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.ficha-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ficha-titulo {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ficha-precio {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.precio {
+  font-size: 28px;
+  font-weight: bold;
+  color: #E85B4E;
+}
+
+.unidad {
+  font-size: 16px;
+  color: #999;
+}
+
+.ficha-detalles {
+  border-top: 1px solid #eee;
+
+  padding: 20px 0;
+}
+
+.ficha-detalles p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+.ficha-detalles strong {
+  color: #333;
+  display: inline-block;
+  min-width: 120px;
+}
+
+.ficha-descripcion {
+  margin: 20px 0;
+}
+
+.ficha-descripcion h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.ficha-descripcion p {
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ficha-compra {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.cantidad-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cantidad-selector label {
+  font-weight: bold;
+  color: #333;
+}
+
+.cantidad-control {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  justify-content: center;
+  align-items: center;
+}
+
+.cantidad-control:focus-within {
+  border-color: #E85B4E;
+  box-shadow: 0 0 0 2px rgba(232, 91, 78, 0.25);
+}
+
+.cantidad-control button {
+  background-color: #f0f0f0;
+  border: none;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cantidad-control button:hover {
+  background-color: #55B2B6;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cantidad-control input {
+  border: none;
+  width: 60px;
+  text-align: center;
+  font-size: 1rem;
+  padding: 0 10px;
+  -moz-appearance: textfield;
+}
+
+.cantidad-control input::-webkit-outer-spin-button,
+.cantidad-control input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cantidad-control input:focus {
+  outline: none;
+}
+
+.btn-comprar-grande {
+  flex: 1;
+  background-color: #E85B4E;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-comprar-grande:hover {
+  background-color: #d0483b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(232, 91, 78, 0.3);
+}
+
+.btn-comprar-grande.agregado {
+  background-color: #28a745;
+  transform: none;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+  cursor: default;
+}
+
+.btn-comprar-grande.agregado:hover {
+  background-color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .ficha-container {
+    padding: 15px;
+  }
+
+  .ficha-producto {
+    grid-template-columns: 45% auto;
+    gap: 30px;
+    padding: 25px;
+  }
+
+  .ficha-titulo {
+    font-size: 28px;
+  }
+
+  .precio {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ficha-container {
+    padding: 10px;
+  }
+
+  .ficha-producto {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .ficha-imagen {
+    min-height: 280px;
+    max-height: 400px;
+  }
+
+  .ficha-titulo {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .precio {
+    font-size: 24px;
+  }
+
+  .ficha-detalles {
+    padding: 15px 0;
+  }
+
+  .ficha-detalles p {
+    font-size: 0.95rem;
+  }
+
+  .ficha-compra {
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 15px;
+  }
+
+  .cantidad-selector {
+    width: 100%;
+  }
+
+  .cantidad-control {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-comprar-grande {
+    width: 100%;
+    padding: 14px 20px;
+  }
+
+  .btn-volver {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ficha-container {
+    padding: 8px;
+    margin: 15px auto;
+  }
+
+  .ficha-producto {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .ficha-imagen {
+    min-height: 220px;
+    max-height: 300px;
+  }
+
+  .ficha-titulo {
+    font-size: 20px;
+  }
+
+  .precio {
+    font-size: 22px;
+  }
+
+  .unidad {
+    font-size: 14px;
+  }
+
+  .ficha-detalles {
+    padding: 12px 0;
+  }
+
+  .ficha-detalles p {
+    font-size: 0.9rem;
+    margin: 8px 0;
+  }
+
+  .ficha-detalles strong {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .ficha-descripcion h3 {
+    font-size: 1.1rem;
+  }
+
+  .ficha-descripcion p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .ficha-compra {
+    gap: 12px;
+    padding-top: 12px;
+  }
+
+  .cantidad-control {
+    padding: 8px;
+  }
+
+  .cantidad-control button {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .cantidad-control input {
+    width: 50px;
+    font-size: 16px;
+  }
+
+  .btn-comprar-grande {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+
+  .btn-volver {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  .stock-info {
+    font-size: 0.9rem;
+  }
+}

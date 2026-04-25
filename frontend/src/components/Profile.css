@@ -1,0 +1,330 @@
+.form-box.large {
+    max-width: 800px;
+}
+
+.profile-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+}
+
+.profile-form-grid .form-group {
+    margin-bottom: 0;
+}
+
+.profile-form-grid .form-group-full {
+    grid-column: 1 / -1;
+}
+
+.profile-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+}
+
+.profile-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    height: fit-content;
+}
+
+.tab-button {
+    padding: 1.2rem 1.5rem;
+    background: white;
+    border: none;
+    border-left: 4px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2C3E50;
+    transition: all 0.3s ease;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-button:hover {
+    background: #F5F5DC;
+    color: #E85B4E;
+}
+
+.tab-button.active {
+    background: #F5F5DC;
+    color: #E85B4E;
+    border-left-color: #E85B4E;
+    font-weight: 600;
+}
+
+.form-group.readonly input {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+    color: #555;
+}
+
+.success-message {
+    color: #28a745;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.form-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.form-button.logout {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.form-button.logout:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Sección de cambio de contraseña */
+.password-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e0e0e0;
+}
+
+.password-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.password-header h3 {
+    margin: 0;
+    color: #2C3E50;
+    font-size: 1.3rem;
+}
+
+.btn-toggle-password {
+    padding: 0.6rem 1.2rem;
+    background-color: #E85B4E;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-toggle-password:hover {
+    background-color: #d44a3d;
+}
+
+.password-form {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+/* Estilos para la sección de pedidos */
+.pedidos-container {
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pedidos-container h2 {
+    margin-bottom: 2rem;
+    color: #2C3E50;
+}
+
+.no-pedidos {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.pedidos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.pedido-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    background: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.pedido-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #E85B4E;
+}
+
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.pedido-header h3 {
+    margin: 0;
+    color: #2C3E50;
+}
+
+.badges-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.estado-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Estados del pedido */
+.estado-badge.estado-pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.estado-badge.estado-preparado {
+    background-color: #cfe2ff;
+    color: #084298;
+}
+
+.estado-badge.estado-enviado {
+    background-color: #e2d9f3;
+    color: #6f42c1;
+}
+
+.estado-badge.estado-finalizado {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.estado-badge.estado-cancelado {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+/* Estado del pago */
+.estado-badge.pagado {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.estado-badge.pendiente-pago {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.pedido-info {
+    margin-bottom: 1.5rem;
+}
+
+.pedido-info p {
+    margin: 0.5rem 0;
+    color: #555;
+}
+
+.pedido-productos h4 {
+    margin-bottom: 1rem;
+    color: #2C3E50;
+}
+
+.pedido-producto {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.pedido-producto:hover {
+    background-color: #f5f5f5;
+}
+
+.pedido-producto img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.producto-info {
+    flex: 1;
+}
+
+.producto-nombre {
+    font-weight: 600;
+    color: #2C3E50;
+    margin-bottom: 0.5rem;
+}
+
+.producto-cantidad,
+.producto-precio {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .profile-tabs {
+        order: -1;
+    }
+    
+    .tab-button {
+        text-align: left;
+        padding: 1rem 1.5rem;
+    }
+    
+    .pedido-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .pedido-producto {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .pedido-producto img {
+        width: 100%;
+        height: auto;
+    }
+}

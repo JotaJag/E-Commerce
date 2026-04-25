@@ -1,0 +1,328 @@
+.top-menu {
+    background-color: #F5F5DC;
+    color: #2C3E50;
+    border-bottom: 1px solid rgb(124, 124, 124);
+    display: flex;
+    justify-content: center;
+}
+
+.top-menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.top-menu ul li {
+    position: relative;
+}
+
+.top-menu ul li a {
+    display: block;
+    color: #2C3E50;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.top-menu ul li a .menu-text {
+    position: relative;
+    display: inline-block;
+}
+
+.top-menu ul li a .menu-text::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #E85B4E;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.25s ease;
+}
+
+.top-menu ul li:hover > a {
+    color: #E85B4E; 
+}
+
+.top-menu ul li:hover > a .menu-text::after {
+    transform: scaleX(1);
+}
+
+.top-menu .submenu {
+    display: none;
+    position: absolute;
+    background-color: #F5F5DC;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    top: 100%;
+    left: 0;
+}
+
+/* Quitar animación de submenus: la línea no debe aparecer aquí */
+.top-menu .submenu li a .menu-text::after {
+    display: none;
+}
+
+.top-menu li:hover .submenu {
+    display: block;
+}
+
+.top-menu .submenu li a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.top-menu .submenu li a::after {
+    content: none;
+}
+
+.top-menu .submenu li a:hover {
+    color: #E85B4E;
+    text-decoration: underline;
+    text-decoration-color: #E85B4E;
+}
+
+/* Botón hamburguesa - oculto en desktop */
+.menu-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    flex-shrink: 0;
+}
+
+.menu-hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: #2C3E50;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Botón cerrar menú */
+.menu-close {
+    display: none;
+}
+
+/* Overlay */
+.menu-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Mostrar botón hamburguesa */
+    .menu-hamburger {
+        display: flex;
+        position: fixed;
+        left: 1rem;
+        top: 80px;
+        background-color: #F5F5DC;
+        border-radius: 8px;
+        padding: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 999;
+    }
+
+    .menu-hamburger:active {
+        transform: scale(0.95);
+    }
+
+    /* Menú lateral */
+    .top-menu {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 300px;
+        height: 100vh;
+        background-color: #F5F5DC;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1002;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-bottom: none;
+        padding-top: 60px;
+    }
+
+    .top-menu.menu-open {
+        left: 0;
+    }
+
+    /* Overlay cuando el menú está abierto */
+    .menu-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1001;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Botón cerrar */
+    .menu-close {
+        display: block;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 36px;
+        color: #2C3E50;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        line-height: 1;
+    }
+
+    /* Menú vertical */
+    .top-menu ul {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0;
+    }
+
+    .top-menu ul li {
+        border-bottom: 1px solid rgba(124, 124, 124, 0.2);
+    }
+
+    .top-menu ul li a {
+        padding: 15px 20px;
+        text-align: left;
+        display: block;
+        font-size: 1rem;
+    }
+
+    .top-menu ul li a .menu-text::after {
+        display: none;
+    }
+
+    /* Submenús en modo móvil */
+    .top-menu .submenu {
+        position: static;
+        box-shadow: none;
+        background-color: rgba(232, 91, 78, 0.08);
+        min-width: auto;
+        display: block;
+        border-left: 3px solid #E85B4E;
+        margin-left: 10px;
+    }
+
+    .top-menu .submenu li a {
+        padding: 12px 20px 12px 40px;
+        font-size: 0.9rem;
+    }
+
+    .top-menu .submenu li:hover a {
+        background-color: rgba(232, 91, 78, 0.15);
+    }
+
+    .top-menu li:hover .submenu {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-hamburger {
+        left: 1,9rem;
+        top: 75px;
+        padding: 6px;
+    }
+
+    .menu-hamburger {
+        width: 28px;
+        height: 23px;
+    }
+
+    .menu-hamburger span {
+        height: 2.5px;
+    }
+
+    .top-menu {
+        width: 280px;
+        left: -280px;
+    }
+
+    .top-menu ul li a {
+        padding: 14px 15px;
+        font-size: 0.95rem;
+    }
+
+    .top-menu .submenu li a {
+        padding: 11px 15px 11px 35px;
+        font-size: 0.85rem;
+    }
+
+    .menu-close {
+        font-size: 32px;
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Estilos reutilizables para enlaces que deben parecerse al menú (sin negrita) */
+.menu-link {
+    color: #2C3E50;
+    text-decoration: none;
+    display: inline-block;
+}
+.menu-link:hover {
+    color: #E85B4E;
+}
+.menu-text-global {
+    position: relative;
+    display: inline-block;
+    font-weight: 400; /* no negrita */
+}
+.menu-text-global::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #E85B4E;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.25s ease;
+}
+.menu-text-global:hover::after,
+.menu-link:hover .menu-text-global::after {
+    transform: scaleX(1);
+}
+
+/* Evitar subrayado en submenus o en cualquier otro lugar donde no corresponda */
+.submenu .menu-text-global::after,
+.top-menu .submenu .menu-text-global::after {
+    display: none !important;
+}

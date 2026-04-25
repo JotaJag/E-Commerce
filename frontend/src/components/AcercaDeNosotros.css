@@ -1,0 +1,228 @@
+.acerca-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Hero Section */
+.acerca-hero {
+  text-align: center;
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #F5F5DC 0%, #E8E8D0 100%);
+  border-radius: 12px;
+  margin-bottom: 3rem;
+}
+
+.acerca-hero h1 {
+  font-size: 2.5rem;
+  color: #2C3E50;
+  margin-bottom: 1rem;
+}
+
+.acerca-subtitulo {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Sección de contenido */
+.acerca-seccion {
+  margin-bottom: 4rem;
+}
+
+.acerca-contenido {
+  display: flex;
+  justify-content: center;
+}
+
+.acerca-texto {
+  max-width: 680px;
+  text-align: center;
+}
+
+.acerca-texto h2 {
+  font-size: 2rem;
+  color: #2C3E50;
+  margin-bottom: 1.5rem;
+}
+
+.acerca-texto p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+
+/* Valores */
+.acerca-valores {
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.acerca-valores h2 {
+  font-size: 2rem;
+  color: #2C3E50;
+  margin-bottom: 2rem;
+}
+
+.valores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.valor-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.valor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.valor-icono {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.valor-card h3 {
+  font-size: 1.3rem;
+  color: #2C3E50;
+  margin-bottom: 0.75rem;
+}
+
+.valor-card p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Misión */
+.acerca-mision {
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+  color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  margin-bottom: 4rem;
+}
+
+.mision-contenido h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.mision-contenido p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Sección de contacto */
+.acerca-contacto-seccion {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.acerca-contacto-seccion h2 {
+  font-size: 2rem;
+  color: #2C3E50;
+  margin-bottom: 1rem;
+}
+
+.acerca-contacto-seccion p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.btn-contacto-primario {
+  background-color: #E85B4E;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(232, 91, 78, 0.3);
+}
+
+.btn-contacto-primario:hover {
+  background-color: #D94B3E;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(232, 91, 78, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+
+  .valores-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .acerca-container {
+    padding: 1rem;
+  }
+
+  .acerca-hero {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .acerca-hero h1 {
+    font-size: 2rem;
+  }
+
+  .acerca-subtitulo {
+    font-size: 1rem;
+  }
+
+  .acerca-texto h2,
+  .acerca-valores h2,
+  .mision-contenido h2,
+  .acerca-contacto-seccion h2 {
+    font-size: 1.5rem;
+  }
+
+  .valores-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .acerca-mision {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .acerca-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .acerca-texto h2,
+  .acerca-valores h2,
+  .mision-contenido h2,
+  .acerca-contacto-seccion h2 {
+    font-size: 1.3rem;
+  }
+
+  .valor-card {
+    padding: 1.5rem;
+  }
+
+  .btn-contacto-primario {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+  }
+}
