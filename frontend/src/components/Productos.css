@@ -63,24 +63,63 @@
   margin-top: 20px;
 }
 
-/* Horizontal scroll mode when many cards */
+/* Carousel wrapper with arrow buttons */
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 5%;
+}
+
+.carousel-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  width: 32px;
+  font-size: 32px;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.carousel-btn:hover {
+  color: #333;
+}
+
+/* Horizontal scroll mode */
 .product-list.scrollable {
   display: flex;
   flex-direction: row;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   gap: 18px;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: 8px 4px 16px;
+  flex: 1;
 }
 
 .product-list.scrollable::-webkit-scrollbar {
-  height: 10px;
+  height: 6px;
+}
+
+.product-list.scrollable::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.product-list.scrollable::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
 }
 
 .product-list.scrollable .product-card {
-  min-width: 220px;
-  flex: 0 0 220px;
+  min-width: 240px;
+  flex: 0 0 240px;
 }
 
 .product-card {
@@ -201,8 +240,7 @@
   background-color: #E85B4E;
   color: white;
   border: none;
-  padding: 12px 24px;
-  font-size: 1rem; 
+  font-size: 0.82rem;
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
@@ -212,7 +250,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 0;
+  padding: 7px 0;
 }
 
 .btn-anadir:hover {
@@ -232,6 +270,49 @@
   background-color: #28a745;
   transform: none;
   box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-anadir.agotado {
+  background-color: #d0d0d0;
+  color: #888;
+  pointer-events: none;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive carousel */
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    padding: 0 2%;
+  }
+
+  .carousel-btn {
+    font-size: 24px;
+    width: 24px;
+  }
+
+  .product-list.scrollable {
+    scroll-snap-type: x mandatory;
+    gap: 0;
+  }
+
+  .product-list.scrollable .product-card {
+    min-width: 100%;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-wrapper {
+    padding: 0 1%;
+  }
+
+  .carousel-btn {
+    font-size: 20px;
+    width: 20px;
+  }
 }
 
 /* Responsive Design */

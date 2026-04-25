@@ -53,10 +53,7 @@ function Productos() {
 
   const handleAddToCart = (product) => {
     const stockDisponible = getStockDisponibleReal(product);
-    if (stockDisponible <= 0) {
-      alert('Producto sin stock disponible');
-      return;
-    }
+    if (stockDisponible <= 0) return;
     const quantity = quantities[product.idProducto] || 1;
     if (quantity > stockDisponible) {
       alert(`Solo hay ${stockDisponible} unidades disponibles`);
@@ -153,10 +150,10 @@ function Productos() {
                         disabled={stockDisponible === 0 || (quantities[product.idProducto] || 1) >= stockDisponible}
                       >+</button>
                     </div>
-                    <button 
-                      className={`btn-anadir ${isAdding ? 'agregado' : ''}`} 
+                    <button
+                      className={`btn-anadir ${isAdding ? 'agregado' : stockDisponible === 0 ? 'agotado' : ''}`}
                       onClick={() => handleAddToCart(product)}
-                      disabled={isAdding || stockDisponible === 0}
+                      disabled={isAdding}
                     >
                       {isAdding ? 'Agregado ✓' : (stockDisponible === 0 ? 'Agotado' : 'Comprar')}
                     </button>

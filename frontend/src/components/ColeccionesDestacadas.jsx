@@ -1,10 +1,46 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Colecciones.css';
+import './Productos.css';
 
 function ColeccionesDestacadas() {
   const [colecciones, setColecciones] = useState([]);
   const [loading, setLoading] = useState(true);
+  const scrollRef = useRef(null);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const scrollStartLeft = useRef(0);
+  const hasDragged = useRef(false);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const card = scrollRef.current.querySelector('.coleccion-link');
+      const amount = card ? card.offsetWidth + 18 : 300;
+      scrollRef.current.scrollBy({ left: direction * amount, behavior: 'smooth' });
+    }
+  };
+
+
+  const onMouseDown = (e) => {
+    isDragging.current = true;
+    dragStartX.current = e.pageX;
+    scrollStartLeft.current = scrollRef.current.scrollLeft;
+    scrollRef.current.style.cursor = 'grabbing';
+    scrollRef.current.style.userSelect = 'none';
+  };
+
+  const onMouseMove = (e) => {
+    if (!isDragging.current) return;
+    const delta = e.pageX - dragStartX.current;
+    scrollRef.current.scrollLeft = scrollStartLeft.current - delta;
+  };
+
+  const onMouseUp = (e) => {
+    hasDragged.current = Math.abs(e.pageX - dragStartX.current) > 5;
+    isDragging.current = false;
+    scrollRef.current.style.cursor = 'grab';
+    scrollRef.current.style.userSelect = '';
+  };
 
   useEffect(() => {
     fetch('http://localhost:8000/api/colecciones/')
@@ -41,13 +77,23 @@ function ColeccionesDestacadas() {
           </Link>
         </div>
         
-        <div className="colecciones-grid">
-          {colecciones.slice(0, 4).map(coleccion => (
-            <a 
+      <div className="carousel-wrapper">
+        <button className="carousel-btn carousel-btn-left" onClick={() => scroll(-1)}>&#8249;</button>
+        <div
+          className="colecciones-grid scrollable"
+          ref={scrollRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          style={{ cursor: 'grab', touchAction: 'pan-x' }}
+        >
+          {colecciones.map(coleccion => (
+            <a
               key={coleccion.id}
               href={`/coleccion/${encodeURIComponent(coleccion.nombre)}`}
               className="coleccion-link"
-              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => { if (hasDragged.current) e.preventDefault(); }}
             >
               <div className="coleccion-card">
                 <div className="coleccion-image-container">
@@ -72,6 +118,8 @@ function ColeccionesDestacadas() {
             </a>
           ))}
         </div>
+        <button className="carousel-btn carousel-btn-right" onClick={() => scroll(1)}>&#8250;</button>
+      </div>
       </div>
     </section>
   );

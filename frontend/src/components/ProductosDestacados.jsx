@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ContextoCarrito } from '../context/ContextoCarrito';
 import Modal from './Modal';
@@ -12,7 +12,34 @@ function ProductosDestacados() {
   const { agregarAlCarrito, articulosCarrito } = useContext(ContextoCarrito);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [addingProductId, setAddingProductId] = useState(null);
+  const scrollRef = useRef(null);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const scrollStartLeft = useRef(0);
   const LIMITE_PRODUCTOS = 12;
+
+  const onMouseDown = (e) => {
+    isDragging.current = true;
+    dragStartX.current = e.pageX;
+    scrollStartLeft.current = scrollRef.current.scrollLeft;
+    scrollRef.current.style.cursor = 'grabbing';
+    scrollRef.current.style.userSelect = 'none';
+  };
+
+  const onMouseMove = (e) => {
+    if (!isDragging.current) return;
+    const delta = e.pageX - dragStartX.current;
+    scrollRef.current.scrollLeft = scrollStartLeft.current - delta;
+  };
+
+  const hasDragged = useRef(false);
+
+  const onMouseUp = (e) => {
+    hasDragged.current = Math.abs(e.pageX - dragStartX.current) > 5;
+    isDragging.current = false;
+    scrollRef.current.style.cursor = 'grab';
+    scrollRef.current.style.userSelect = '';
+  };
 
   useEffect(() => {
     return () => {
@@ -53,10 +80,7 @@ function ProductosDestacados() {
 
   const handleAddToCart = (product) => {
     const stockDisponible = getStockDisponibleReal(product);
-    if (stockDisponible <= 0) {
-      alert('Producto sin stock disponible');
-      return;
-    }
+    if (stockDisponible <= 0) return;
     const quantity = quantities[product.idProducto] || 1;
     if (quantity > stockDisponible) {
       alert(`Solo hay ${stockDisponible} unidades disponibles`);
@@ -77,15 +101,22 @@ function ProductosDestacados() {
 
   const handleImageClick = (e, product) => {
     e.stopPropagation();
+    if (hasDragged.current) return;
     if (e.target.tagName === 'IMG' || e.currentTarget.classList.contains('product-image-container')) {
       setSelectedProduct(product);
     }
   };
 
-  const productosActivos = products.filter(product => product.estado);
-  const isScrollable = productosActivos.length > 6;
-  const MAX_SCROLLABLE = 18;
-  const visibleCount = isScrollable ? Math.min(productosActivos.length, MAX_SCROLLABLE) : Math.min(productosActivos.length, LIMITE_PRODUCTOS);
+  const productosActivos = products.filter(product => product.estado).slice(0, 18);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const card = scrollRef.current.querySelector('.product-card');
+      const amount = card ? card.offsetWidth + 18 : 300;
+      scrollRef.current.scrollBy({ left: direction * amount, behavior: 'smooth' });
+    }
+  };
+
 
   if (productosActivos.length === 0) {
     return null;
@@ -105,8 +136,18 @@ function ProductosDestacados() {
 
       </div>
       
-      <div className={`product-list ${isScrollable ? 'scrollable' : ''}`}>
-        {productosActivos.slice(0, visibleCount).map(product => {
+      <div className="carousel-wrapper">
+        <button className="carousel-btn carousel-btn-left" onClick={() => scroll(-1)}>&#8249;</button>
+        <div
+          className="product-list scrollable"
+          ref={scrollRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          style={{ cursor: 'grab', touchAction: 'pan-x' }}
+        >
+        {productosActivos.map(product => {
           const isAdding = addingProductId === product.idProducto;
           const stockDisponible = getStockDisponibleReal(product);
           return (
@@ -157,10 +198,10 @@ function ProductosDestacados() {
                       disabled={stockDisponible === 0 || (quantities[product.idProducto] || 1) >= stockDisponible}
                     >+</button>
                   </div>
-                  <button 
-                    className={`btn-anadir ${isAdding ? 'agregado' : ''}`} 
+                  <button
+                    className={`btn-anadir ${isAdding ? 'agregado' : stockDisponible === 0 ? 'agotado' : ''}`}
                     onClick={() => handleAddToCart(product)}
-                    disabled={isAdding || stockDisponible === 0}
+                    disabled={isAdding}
                   >
                     {isAdding ? 'Agregado ✓' : (stockDisponible === 0 ? 'Agotado' : 'Comprar')}
                   </button>
@@ -169,8 +210,10 @@ function ProductosDestacados() {
             </div>
           );
         })}
+        </div>
+        <button className="carousel-btn carousel-btn-right" onClick={() => scroll(1)}>&#8250;</button>
       </div>
-      
+
       {selectedProduct && selectedProduct.idProducto && (
         <Modal onClose={() => setSelectedProduct(null)}>
           <FichaProducto productId={selectedProduct.idProducto} />

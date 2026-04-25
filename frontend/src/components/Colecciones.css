@@ -53,6 +53,49 @@
   margin-top: 20px;
 }
 
+/* Carousel horizontal */
+.colecciones-grid.scrollable {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: 18px;
+  padding: 8px 4px 16px;
+  flex: 1;
+}
+
+.colecciones-grid.scrollable::-webkit-scrollbar {
+  height: 6px;
+}
+
+.colecciones-grid.scrollable::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.colecciones-grid.scrollable::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.colecciones-grid.scrollable .coleccion-link {
+  min-width: 240px;
+  flex: 0 0 240px;
+}
+
+@media (max-width: 768px) {
+  .colecciones-grid.scrollable {
+    scroll-snap-type: x mandatory;
+    gap: 0;
+  }
+
+  .colecciones-grid.scrollable .coleccion-link {
+    min-width: 100%;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+}
+
 /* Tarjeta de colección */
 .coleccion-link {
   text-decoration: none;

@@ -1,6 +1,6 @@
 .ficha-container {
   max-width: 1200px;
-  padding: 20px;
+  padding: 8px;
 }
 
 .btn-volver {
@@ -23,9 +23,9 @@
 .ficha-producto {
   display: grid;
   grid-template-columns: 40% auto;
-  gap: 40px;
+  gap: 24px;
   background: white;
-  padding: 30px;
+  padding: 16px;
 }
 
 .ficha-imagen {
@@ -35,12 +35,14 @@
   background-color: #ffffff;
   border-radius: 12px;
   overflow: hidden;
-  min-height: 400px;
+  align-self: stretch;
 }
 
 .ficha-imagen img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 320px;
+  width: auto;
+  height: auto;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
@@ -76,11 +78,11 @@
 .ficha-info {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .ficha-titulo {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: bold;
   color: #333;
   margin: 0;
@@ -94,7 +96,7 @@
 }
 
 .precio {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: bold;
   color: #E85B4E;
 }
@@ -106,13 +108,12 @@
 
 .ficha-detalles {
   border-top: 1px solid #eee;
-
-  padding: 20px 0;
+  padding: 10px 0;
 }
 
 .ficha-detalles p {
-  margin: 10px 0;
-  font-size: 1rem;
+  margin: 5px 0;
+  font-size: 0.92rem;
   color: #666;
 }
 
@@ -123,7 +124,7 @@
 }
 
 .ficha-descripcion {
-  margin: 20px 0;
+  margin: 6px 0;
 }
 
 .ficha-descripcion h3 {
@@ -142,8 +143,8 @@
   display: flex;
   gap: 20px;
   align-items: center;
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: 8px;
+  padding-top: 12px;
   border-top: 1px solid #eee;
 }
 
@@ -244,6 +245,15 @@
   background-color: #28a745;
 }
 
+.btn-comprar-grande.agotado {
+  background-color: #d0d0d0;
+  color: #888;
+  pointer-events: none;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .ficha-container {
@@ -267,55 +277,68 @@
 
 @media (max-width: 768px) {
   .ficha-container {
-    padding: 10px;
+    padding: 6px;
   }
 
   .ficha-producto {
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 20px;
+    gap: 12px;
+    padding: 12px;
   }
 
   .ficha-imagen {
-    min-height: 280px;
-    max-height: 400px;
+    height: 220px;
   }
 
   .ficha-titulo {
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1.2;
   }
 
   .precio {
-    font-size: 24px;
+    font-size: 20px;
+  }
+
+  .ficha-info {
+    gap: 8px;
   }
 
   .ficha-detalles {
-    padding: 15px 0;
+    padding: 8px 0;
   }
 
   .ficha-detalles p {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
+    margin: 4px 0;
+  }
+
+  .ficha-descripcion {
+    margin: 4px 0;
+  }
+
+  .ficha-descripcion h3 {
+    font-size: 1rem;
+  }
+
+  .ficha-descripcion p {
+    font-size: 0.88rem;
   }
 
   .ficha-compra {
-    flex-direction: column;
-    gap: 15px;
-    padding-top: 15px;
+    flex-direction: row;
+    gap: 10px;
+    padding-top: 10px;
+    flex-wrap: wrap;
   }
 
   .cantidad-selector {
-    width: 100%;
-  }
-
-  .cantidad-control {
-    width: 100%;
-    justify-content: space-between;
+    flex-shrink: 0;
   }
 
   .btn-comprar-grande {
-    width: 100%;
-    padding: 14px 20px;
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 0.95rem;
   }
 
   .btn-volver {
@@ -326,87 +349,53 @@
 
 @media (max-width: 480px) {
   .ficha-container {
-    padding: 8px;
-    margin: 15px auto;
+    padding: 4px;
   }
 
   .ficha-producto {
-    padding: 15px;
-    gap: 15px;
+    padding: 10px;
+    gap: 10px;
   }
 
   .ficha-imagen {
-    min-height: 220px;
-    max-height: 300px;
+    height: 180px;
   }
 
   .ficha-titulo {
-    font-size: 20px;
+    font-size: 17px;
   }
 
   .precio {
-    font-size: 22px;
-  }
-
-  .unidad {
-    font-size: 14px;
-  }
-
-  .ficha-detalles {
-    padding: 12px 0;
-  }
-
-  .ficha-detalles p {
-    font-size: 0.9rem;
-    margin: 8px 0;
-  }
-
-  .ficha-detalles strong {
-    min-width: 100px;
-    font-size: 0.9rem;
-  }
-
-  .ficha-descripcion h3 {
-    font-size: 1.1rem;
-  }
-
-  .ficha-descripcion p {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-
-  .ficha-compra {
-    gap: 12px;
-    padding-top: 12px;
-  }
-
-  .cantidad-control {
-    padding: 8px;
-  }
-
-  .cantidad-control button {
-    width: 36px;
-    height: 36px;
     font-size: 18px;
   }
 
-  .cantidad-control input {
-    width: 50px;
+  .unidad {
+    font-size: 13px;
+  }
+
+  .ficha-detalles strong {
+    min-width: 85px;
+    font-size: 0.85rem;
+  }
+
+  .ficha-compra {
+    gap: 8px;
+    padding-top: 8px;
+  }
+
+  .cantidad-control button {
+    width: 34px;
+    height: 34px;
     font-size: 16px;
   }
 
+  .cantidad-control input {
+    width: 44px;
+    font-size: 14px;
+  }
+
   .btn-comprar-grande {
-    padding: 12px 16px;
-    font-size: 0.95rem;
-  }
-
-  .btn-volver {
-    padding: 10px 18px;
-    font-size: 0.85rem;
-    margin-bottom: 8px;
-  }
-
-  .stock-info {
-    font-size: 0.9rem;
+    padding: 10px 12px;
+    font-size: 0.88rem;
   }
 }

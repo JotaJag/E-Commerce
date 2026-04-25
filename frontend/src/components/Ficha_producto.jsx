@@ -43,10 +43,7 @@ function FichaProducto({ productId, onClose }) {
   const handleAddToCart = () => {
     if (product) {
         const stockDisponible = getStockDisponibleReal();
-        if (stockDisponible <= 0) {
-          alert('Producto sin stock disponible');
-          return;
-        }
+        if (stockDisponible <= 0) return;
         if (quantity > stockDisponible) {
           alert(`Solo hay ${stockDisponible} unidades disponibles`);
           return;
@@ -119,6 +116,7 @@ function FichaProducto({ productId, onClose }) {
                       <span className="precio" style={{color: '#E85B4E'}}>
                         {parseFloat(precioConDesc).toFixed(2)} €
                       </span>
+                      <span className="unidad">/ud</span>
                       <span className="descuento-badge" style={{marginLeft: '8px', background: '#E85B4E', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.85rem'}}>
                         -{descuentoPorMostrar.toFixed(0)}%
                       </span>
@@ -126,10 +124,9 @@ function FichaProducto({ productId, onClose }) {
                   );
                 }
 
-                return <span className="precio">{precioUnit.toFixed(2)} €</span>;
+                return <><span className="precio">{precioUnit.toFixed(2)} €</span><span className="unidad">/ud</span></>;
               })()
             }
-            <span className="unidad">/ud</span>
           </div>
 
           <div className="ficha-descripcion">
@@ -188,10 +185,10 @@ function FichaProducto({ productId, onClose }) {
               </div>
             </div>
 
-            <button 
-              className={`btn-comprar-grande ${isAdding ? 'agregado' : ''}`} 
+            <button
+              className={`btn-comprar-grande ${isAdding ? 'agregado' : getStockDisponibleReal() === 0 ? 'agotado' : ''}`}
               onClick={handleAddToCart}
-              disabled={isAdding || getStockDisponibleReal() === 0}
+              disabled={isAdding}
             >
               {isAdding ? 'Agregado ✓' : (getStockDisponibleReal() === 0 ? 'Sin stock' : 'Añadir al carrito')}
             </button>

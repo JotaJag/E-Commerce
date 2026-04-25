@@ -233,14 +233,14 @@
 @media (max-width: 768px) {
     .carrito-container {
         grid-template-columns: 1fr;
-        padding: 15px 10px;
-        margin: 20px auto;
-        gap: 20px;
+        padding: 12px 10px;
+        margin: 15px auto;
+        gap: 16px;
     }
 
     .carrito-container h2 {
-        font-size: 1.5em;
-        margin-bottom: 20px;
+        font-size: 1.4em;
+        margin-bottom: 16px;
     }
 
     .carrito-resumen {
@@ -255,13 +255,14 @@
     .carrito-item {
         flex-direction: row;
         align-items: center;
-        padding: 12px;
-        gap: 12px;
+        padding: 10px;
+        gap: 10px;
+        flex-wrap: wrap;
     }
 
     .carrito-item-imagen {
-        width: 80px;
-        height: 80px;
+        width: 72px;
+        height: 72px;
         margin-right: 0;
         flex-shrink: 0;
     }
@@ -272,61 +273,98 @@
     }
 
     .carrito-item-details h3 {
-        font-size: 1.05em;
+        font-size: 0.98em;
+    }
+
+    .carrito-item-details p {
+        font-size: 0.88em;
     }
 
     .carrito-item-actions {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
         width: 100%;
         gap: 10px;
-        margin-top: 10px;
+        margin-top: 6px;
+        margin-left: 0;
+        justify-content: space-between;
     }
 
     .btn-vaciar,
     .btn-comprar {
-        width: 100%;       
-        margin: 5px 0;
-        padding: 14px;
+        width: 100%;
+        margin: 4px 0;
+        padding: 13px;
     }
 }
 
 @media (max-width: 480px) {
     .carrito-container {
-        padding: 10px 5px;
-        margin: 15px auto;
+        padding: 8px 6px;
+        margin: 10px auto;
+        gap: 12px;
     }
 
     .carrito-container h2 {
-        font-size: 1.3em;
+        font-size: 1.2em;
+        margin-bottom: 12px;
     }
 
     .carrito-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px;
+        padding: 8px;
+        gap: 8px;
     }
 
     .carrito-item-imagen {
-        width: 100%;
-        height: 120px;
-        margin-bottom: 10px;
+        width: 60px;
+        height: 60px;
     }
 
     .carrito-item-details h3 {
-        font-size: 1em;
-    }
-
-    .carrito-item-details p {
         font-size: 0.9em;
     }
 
+    .carrito-item-details p {
+        font-size: 0.82em;
+    }
+
+    .carrito-item-actions {
+        gap: 8px;
+    }
+
+    .cantidad-control button {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+    }
+
+    .btn-eliminar {
+        padding: 6px 10px;
+        font-size: 0.82em;
+    }
+
     .carrito-resumen {
-        padding: 15px;
+        padding: 14px;
     }
 
     .carrito-resumen h3 {
-        font-size: 1.2em;
+        font-size: 1.1em;
+        margin-bottom: 14px;
+    }
+
+    .resumen-linea {
+        font-size: 0.92em;
+        margin-bottom: 8px;
+    }
+
+    .resumen-total {
+        font-size: 1.1em;
+    }
+
+    .btn-vaciar,
+    .btn-comprar {
+        padding: 12px;
+        font-size: 0.92em;
     }
 }
 
