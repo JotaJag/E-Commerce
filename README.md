@@ -34,10 +34,15 @@ Aplicación de comercio electrónico full-stack desarrollada como Trabajo de Fin
 - Registro e inicio de sesión con autenticación por token (Knox)
 - Modelo de usuario personalizado basado en email (sin nombre de usuario)
 - Catálogo de productos con categorías jerárquicas y colecciones
-- Carrito de compra persistente con fusión de carrito de invitado
-- Pago integrado con **Stripe Checkout**
+- Filtrado de productos por categoría, incluyendo subcategorías automáticamente
+- Descuentos por producto y por colección, con herencia automática si el producto no tiene descuento propio
+- Carrito de compra persistente con fusión de carrito de invitado al iniciar sesión
+- Pago integrado con **Stripe Checkout** con IVA (21%) desglosado en la sesión de pago
+- Pedidos con desglose fiscal completo (base imponible, cuota IVA, total)
 - Gestión de pedidos con ciclo de vida completo (pendiente → preparado → enviado → finalizado/cancelado)
 - Control de stock con historial de movimientos
+- Recuperación de contraseña por email con enlace seguro de un solo uso
+- Formulario de contacto con confirmación por email al usuario y notificación al administrador
 - Panel de administración personalizado con Django Jazzmin
 - Gestión de banners, menú de navegación, clientes y pedidos desde el admin
 
@@ -53,8 +58,9 @@ E-Commerce/
 ├── frontend/           # Aplicación React + Vite
 │   ├── src/
 │   │   ├── components/ # Componentes reutilizables
-│   │   ├── pages/      # Páginas de la aplicación
-│   │   └── context/    # Contextos (Auth, Carrito)
+│   │   ├── context/    # Contextos (Auth, Carrito)
+│   │   ├── utils/      # Utilidades y helpers
+│   │   └── test/       # Tests del frontend
 ├── media/              # Archivos subidos (imágenes de productos)
 ├── templates/          # Plantillas Django
 ├── manage.py
@@ -163,31 +169,48 @@ npm run dev
 ## Principales endpoints de la API
 
 ### Autenticación
+
+La API usa **Django Knox** para la gestión de tokens. Al hacer login o registro se devuelve un token que debe enviarse en la cabecera de todas las peticiones protegidas:
+
+```
+Authorization: Token <token>
+```
+
 | Método | Endpoint | Descripción |
 |---|---|---|
-| `POST` | `/api/auth/register/` | Registro de usuario |
+| `POST` | `/api/auth/register/` | Registro de usuario (devuelve token) |
 | `POST` | `/api/auth/login/` | Inicio de sesión (devuelve token) |
 | `GET` | `/api/auth/user/` | Datos del usuario autenticado |
-| `GET` | `/api/auth/profile/` | Perfil del cliente |
+| `GET/PUT/PATCH` | `/api/auth/profile/` | Perfil del cliente |
 | `POST` | `/api/auth/change-password/` | Cambio de contraseña |
-| `POST` | `/api/auth/logout/` | Cerrar sesión |
+| `POST` | `/api/auth/password-reset/` | Solicitar restablecimiento de contraseña |
+| `POST` | `/api/auth/password-reset-confirm/` | Confirmar nueva contraseña |
+| `POST` | `/api/auth/contacto/` | Formulario de contacto |
+| `POST` | `/api/auth/logout/` | Cerrar sesión (invalida el token actual) |
+| `POST` | `/api/auth/logoutall/` | Cerrar todas las sesiones (invalida todos los tokens) |
 
 ### Catálogo (públicos)
 | Método | Endpoint | Descripción |
 |---|---|---|
 | `GET` | `/api/productos/` | Listado de productos |
 | `GET` | `/api/productos/<id>/` | Detalle de producto |
-| `GET` | `/api/categorias/` | Categorías |
+| `GET` | `/api/categorias/` | Categorías (con subcategorías anidadas) |
 | `GET` | `/api/colecciones/` | Colecciones |
 | `GET` | `/api/banners/` | Banners promocionales |
+| `GET` | `/api/menus/` | Menú de navegación (con submenús anidados) |
 
 ### Carrito y pedidos (requieren autenticación)
 | Método | Endpoint | Descripción |
 |---|---|---|
-| `GET/POST` | `/api/carrito/` | Ver o modificar carrito |
+| `GET/POST` | `/api/carrito-compras/` | Ver o modificar carrito |
 | `GET` | `/api/pedidos/` | Historial de pedidos |
 | `POST` | `/api/crear-sesion-pago/` | Crear sesión de pago Stripe |
-| `POST` | `/api/webhook-stripe/` | Webhook de confirmación de pago |
+| `POST` | `/api/confirmar-pedido/` | Confirmar pedido tras pago exitoso (fallback sin webhook) |
+
+### Stripe (sin autenticación de usuario)
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `POST` | `/api/webhook-stripe/` | Webhook llamado por Stripe al completar el pago |
 
 ---
 
@@ -203,13 +226,46 @@ npm run dev
 
 ## Tests
 
+### Backend (Django + pytest)
+
 ```bash
 # Ejecutar todos los tests
-python manage.py test
+pytest
+
+# Solo una app
+pytest autenticacion/
+pytest backend/
 
 # Con cobertura
-coverage run manage.py test
+coverage run -m pytest
 coverage report
+coverage html   # genera reporte en htmlcov/
+```
+
+### Con Docker
+
+```bash
+# Backend
+docker-compose --profile test up backend-test
+
+# Frontend
+docker-compose --profile test up frontend-test
+
+# Ambos a la vez
+docker-compose --profile test up
+
+# Scripts de conveniencia
+./run_tests.sh          # Linux/Mac
+.\run_tests.ps1         # Windows PowerShell
+.\run_tests.ps1 -Coverage -App backend   # con opciones
+```
+
+### Frontend (Vitest)
+
+```bash
+cd frontend
+npm run test       # modo watch
+npm run test:run   # ejecución única
 ```
 
 ---

@@ -457,7 +457,9 @@ class ProductoSerializerTest(TestCase):
         self.assertEqual(set(data.keys()), {
             'idProducto', 'nombre', 'descripcion', 'precioUnitario',
             'imagen', 'imagen_url', 'estado', 'marca', 'modelo',
-            'color', 'tipo', 'coleccion', 'coleccion_nombre', 'categoria', 'stock', 'stock_reservado', 'stock_disponible'
+            'color', 'tipo', 'coleccion', 'coleccion_nombre', 'categoria',
+            'stock', 'stock_reservado', 'stock_disponible',
+            'descuento', 'descuento_efectivo', 'precio_con_descuento'
         })
 
     def test_producto_serializer_field_content(self):
