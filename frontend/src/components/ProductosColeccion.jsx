@@ -199,8 +199,8 @@ function ProductosColeccion() {
                         +
                       </button>
                     </div>
-                    <button 
-                      className={`btn-anadir ${isAdding ? 'agregado' : ''}`}
+                    <button
+                      className={`btn-anadir ${isAdding ? 'agregado' : stockDisponible === 0 ? 'agotado' : ''}`}
                       onClick={() => handleAddToCart(product)}
                       disabled={isAdding || stockDisponible === 0}
                     >

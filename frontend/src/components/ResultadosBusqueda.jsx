@@ -9,20 +9,12 @@ import './Modal.css';
 function ResultadosBusqueda() {
   const [products, setProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
-  const { agregarAlCarrito } = useContext(ContextoCarrito);
+  const { agregarAlCarrito, articulosCarrito } = useContext(ContextoCarrito);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [addingProductId, setAddingProductId] = useState(null);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    // Limpiar estado al desmontar
-    return () => {
-      setSelectedProduct(null);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Limpiar estado al desmontar
     return () => {
       setSelectedProduct(null);
     };
@@ -44,18 +36,37 @@ function ResultadosBusqueda() {
       });
   }, []);
 
+  const getStockDisponibleReal = (product) => {
+    const enCarrito = articulosCarrito.find(item => item.id === product.idProducto);
+    const cantidadEnCarrito = enCarrito ? enCarrito.cantidad : 0;
+    return (product.stock_disponible || 0) - cantidadEnCarrito;
+  };
+
   const handleQuantityChange = (productId, newQuantity) => {
+    const product = products.find(p => p.idProducto === productId);
+    const maxStock = getStockDisponibleReal(product);
     setQuantities(prev => ({
       ...prev,
-      [productId]: Math.max(1, newQuantity),
+      [productId]: Math.max(1, Math.min(newQuantity, maxStock)),
     }));
   };
 
   const handleAddToCart = (product) => {
+    const stockDisponible = getStockDisponibleReal(product);
+    if (stockDisponible <= 0) return;
     const quantity = quantities[product.idProducto] || 1;
+    if (quantity > stockDisponible) {
+      alert(`Solo hay ${stockDisponible} unidades disponibles`);
+      return;
+    }
     setAddingProductId(product.idProducto);
     agregarAlCarrito(product, quantity);
-    
+
+    setQuantities(prev => ({
+      ...prev,
+      [product.idProducto]: 1
+    }));
+
     setTimeout(() => {
       setAddingProductId(null);
     }, 2000);
@@ -151,6 +162,7 @@ function ResultadosBusqueda() {
         {productosFiltrados.length > 0 ? (
           productosFiltrados.map(product => {
             const isAdding = addingProductId === product.idProducto;
+            const stockDisponible = getStockDisponibleReal(product);
             return (
               <div key={product.idProducto} className="product-card">
                 <div onClick={() => handleOpenModal(product)} className="product-image-container" style={{cursor: 'pointer'}}>
@@ -181,18 +193,30 @@ function ResultadosBusqueda() {
                       return <p className="product-price">{precioUnit.toFixed(2)} €</p>;
                     })()
                   }
+                  {stockDisponible <= 5 && stockDisponible > 0 && (
+                    <p className="stock-warning">¡Solo quedan {stockDisponible} unidades!</p>
+                  )}
+                  {stockDisponible === 0 && (
+                    <p className="stock-agotado">Sin stock</p>
+                  )}
                   <div className="product-card-controls">
                     <div className="cantidad-control-card">
-                      <button onClick={() => handleQuantityChange(product.idProducto, (quantities[product.idProducto] || 1) - 1)}>−</button>
+                      <button
+                        onClick={() => handleQuantityChange(product.idProducto, (quantities[product.idProducto] || 1) - 1)}
+                        disabled={stockDisponible === 0}
+                      >−</button>
                       <span>{quantities[product.idProducto] || 1}</span>
-                      <button onClick={() => handleQuantityChange(product.idProducto, (quantities[product.idProducto] || 1) + 1)}>+</button>
+                      <button
+                        onClick={() => handleQuantityChange(product.idProducto, (quantities[product.idProducto] || 1) + 1)}
+                        disabled={stockDisponible === 0 || (quantities[product.idProducto] || 1) >= stockDisponible}
+                      >+</button>
                     </div>
-                    <button 
-                      className={`btn-anadir ${isAdding ? 'agregado' : ''}`} 
+                    <button
+                      className={`btn-anadir ${isAdding ? 'agregado' : stockDisponible === 0 ? 'agotado' : ''}`}
                       onClick={() => handleAddToCart(product)}
                       disabled={isAdding}
                     >
-                      {isAdding ? 'Agregado ✓' : 'Comprar'}
+                      {isAdding ? 'Agregado ✓' : (stockDisponible === 0 ? 'Agotado' : 'Comprar')}
                     </button>
                   </div>
                 </div>
