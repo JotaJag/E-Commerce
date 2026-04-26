@@ -176,13 +176,13 @@ class ContactoAPIView(generics.GenericAPIView):
             )
 
             send_mail(
-                subject='Hemos recibido tu mensaje - E-Commerce',
-                message=f'Hola {nombre},\n\nHemos recibido tu mensaje y nos pondremos en contacto contigo lo antes posible.\n\nTu mensaje:\n{mensaje}\n\nSaludos,\nEl equipo de E-Commerce',
+                subject='Hemos recibido tu mensaje - TypeVibe86',
+                message=f'Hola {nombre},\n\nHemos recibido tu mensaje y nos pondremos en contacto contigo lo antes posible.\n\nTu mensaje:\n{mensaje}\n\nSaludos,\nEl equipo de TypeVibe86',
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
                 fail_silently=False,
             )
 
-            return Response({'message': 'Mensaje enviado exitosamente.'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Mensaje enviado exitosamente, en breve nos pondremos en contacto contigo.'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': 'Hubo un error al enviar el mensaje.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

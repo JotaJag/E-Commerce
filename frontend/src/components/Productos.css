@@ -34,7 +34,7 @@
 }
 
 .titulo-bloque {
-  color: #333;
+  color: #2C3E50;
   font-size: 30px;
   font-weight: bold;
   text-align: left;
@@ -43,7 +43,7 @@
 }
 
 .subtitulo-bloque {
-  color: #333;
+  color: #2C3E50;
   font-size: 20px;
   text-align: left;
   padding-left: 5%;
@@ -89,7 +89,7 @@
 }
 
 .carousel-btn:hover {
-  color: #333;
+  color: #2C3E50;
 }
 
 /* Horizontal scroll mode */
@@ -165,13 +165,13 @@
   font-weight: 600;
   margin: 0 0 8px 0;
   line-height: 1.4;
-  color: #333;
+  color: #2C3E50;
 }
 
 .product-price {
   font-size: 18px;
   font-weight: bold;
-  color: #000;
+  color: #2C3E50;
   margin: 0 0 4px 0;
 }
 
@@ -227,7 +227,7 @@
 }
 
 .cantidad-control-card button:hover {
-    color: #000;
+    color: #2C3E50;
     background-color: #f0f0f0;
 }
 
@@ -254,22 +254,22 @@
 }
 
 .btn-anadir:hover {
-  background-color: #d0483b;
+  background-color: #d44a3d;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(232, 91, 78, 0.3);
 }
 
 .btn-anadir.agregado {
-  background-color: #28a745;
+  background-color: #55B2B6;
   transform: none;
-  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+  box-shadow: 0 4px 8px rgba(85, 178, 182, 0.3);
   cursor: default;
 }
 
 .btn-anadir.agregado:hover {
-  background-color: #28a745;
+  background-color: #55B2B6;
   transform: none;
-  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+  box-shadow: 0 4px 8px rgba(85, 178, 182, 0.3);
 }
 
 .btn-anadir.agotado {

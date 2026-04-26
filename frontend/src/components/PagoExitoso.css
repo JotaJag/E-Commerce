@@ -33,7 +33,7 @@
     width: 100px;
     height: 100px;
     margin: 0 auto 2rem;
-    background: #4CAF50;
+    background: #55B2B6;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -135,14 +135,14 @@
 }
 
 .btn-principal {
-    background-color: #4CAF50;
+    background-color: #55B2B6;
     color: white;
 }
 
 .btn-principal:hover {
-    background-color: #45a049;
+    background-color: #3a7f83;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 4px 8px rgba(85, 178, 182, 0.3);
 }
 
 .btn-secundario {

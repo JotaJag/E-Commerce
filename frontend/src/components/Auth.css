@@ -67,7 +67,7 @@
 }
 
 .form-button:hover {
-    background-color: #cf4a3d; 
+    background-color: #d44a3d;
     transform: translateY(-2px); 
 }
 
@@ -118,7 +118,7 @@
 }
 
 .success-message {
-    color: #28a745;
+    color: #55B2B6;
     margin-bottom: 15px;
     font-size: 14px;
     font-weight: bold;

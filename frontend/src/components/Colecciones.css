@@ -157,7 +157,7 @@
   font-weight: 600;
   margin: 0 0 8px 0;
   line-height: 1.4;
-  color: #333;
+  color: #2C3E50;
 }
 
 .coleccion-descripcion {
@@ -193,7 +193,7 @@
 }
 
 .coleccion-boton:hover {
-  background-color: #d0483b;
+  background-color: #d44a3d;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(232, 91, 78, 0.3);
 }

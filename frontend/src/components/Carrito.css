@@ -19,7 +19,7 @@
 .carrito-container h2 {
     grid-column: 1 / -1;
     text-align: center;
-    color: #333;
+    color: #2C3E50;
     margin-bottom: 30px;
     font-size: 2em;
 }
@@ -57,7 +57,7 @@
 }
 
 .btn-volver-tienda:hover {
-    background-color: #d94a3d;
+    background-color: #d44a3d;
     transform: translateY(-2px);
     color: white;
     box-shadow: 0 4px 8px rgba(232, 91, 78, 0.3);
@@ -100,7 +100,7 @@
 .carrito-item-details h3 {
     margin: 0;
     font-size: 1.15em;
-    color: #333;
+    color: #2C3E50;
 }
 
 .carrito-item-details p {
@@ -158,7 +158,7 @@
 }
 
 .btn-eliminar:hover {
-    background-color: #d0483b;
+    background-color: #d44a3d;
 }
 
 .carrito-resumen {
@@ -173,7 +173,7 @@
 
 .carrito-resumen h3 {
     font-size: 1.5em;
-    color: #333;
+    color: #2C3E50;
     margin-bottom: 20px;
     margin-top: 0;
     text-align: left;
@@ -195,7 +195,7 @@
     border-top: 2px solid #e0e0e0;
     font-size: 1.3em;
     font-weight: bold;
-    color: #333;
+    color: #2C3E50;
     margin-bottom: 25px;
 }
 
@@ -214,7 +214,7 @@
 
 .btn-vaciar {
     background-color: #ccc;
-    color: #333;
+    color: #2C3E50;
 }
 
 .btn-vaciar:hover {
@@ -222,12 +222,12 @@
 }
 
 .btn-comprar {
-    background-color: #E85B4E;
+    background-color: #55B2B6;
     color: white;
 }
 
 .btn-comprar:hover {
-    background-color: #d94a3d;
+    background-color: #3a7f83;
 }
 
 @media (max-width: 768px) {
@@ -378,7 +378,7 @@
 .pago-container h1 {
     font-size: 2rem;
     margin-bottom: 30px;
-    color: #333;
+    color: #2C3E50;
 }
 
 .pago-vacio {
@@ -419,7 +419,7 @@
 }
 
 .btn-volver:hover {
-    background-color: #d94a3d;
+    background-color: #d44a3d;
 }
 
 .pago-contenido {
@@ -438,7 +438,7 @@
 .pago-formulario h2 {
     font-size: 1.5rem;
     margin-bottom: 20px;
-    color: #333;
+    color: #2C3E50;
 }
 
 .error-mensaje {
@@ -522,7 +522,7 @@
 
 .btn-confirmar-pago {
     width: 100%;
-    background-color: #E85B4E;
+    background-color: #55B2B6;
     color: white;
     padding: 15px;
     border: none;
@@ -535,7 +535,7 @@
 }
 
 .btn-confirmar-pago:hover:not(:disabled) {
-    background-color: #d94a3d;
+    background-color: #3a7f83;
 }
 
 .btn-confirmar-pago:disabled {
@@ -556,7 +556,7 @@
 .pago-resumen h2 {
     font-size: 1.5rem;
     margin-bottom: 20px;
-    color: #333;
+    color: #2C3E50;
 }
 
 .resumen-items {
@@ -590,7 +590,7 @@
 
 .resumen-item-nombre {
     font-weight: 500;
-    color: #333;
+    color: #2C3E50;
     margin-bottom: 5px;
 }
 
@@ -601,7 +601,7 @@
 
 .resumen-item-precio {
     font-weight: 600;
-    color: #4CAF50;
+    color: #E85B4E;
 }
 
 .resumen-totales {
@@ -619,10 +619,10 @@
 .resumen-total {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #333;
+    color: #2C3E50;
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 2px solid #333;
+    border-top: 2px solid #2C3E50;
 }
 
 @media (max-width: 1024px) {

@@ -54,7 +54,7 @@
   outline: none;
   padding: 10px 0;
   font-size: 1rem;
-  color: #333;
+  color: #2C3E50;
 }
 
 .search-input::placeholder {
@@ -282,7 +282,7 @@
   position: absolute;
   bottom: 2px;
   right: 2px;
-  background-color: #4CAF50;
+  background-color: #55B2B6;
   border-radius: 50%;
   width: 8px;
   height: 8px;

@@ -157,7 +157,7 @@
 }
 
 .btn-contacto-primario:hover {
-  background-color: #D94B3E;
+  background-color: #d44a3d;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(232, 91, 78, 0.4);
 }

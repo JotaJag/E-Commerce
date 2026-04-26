@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: #213547;
+  color: #2C3E50;
   background-color: #ffffff;
 
   font-synthesis: none;
@@ -14,11 +14,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #E85B4E;
   text-decoration: inherit;
 }
 a:hover {
-  color: #747bff;
+  color: #d44a3d;
 }
 
 body {
@@ -55,7 +55,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: transparent;
 }
 button:focus:not(:focus-visible) {
   outline: none;

@@ -69,7 +69,7 @@
 }
 
 .consent-link:hover {
-  color: #d94a3d;
+  color: #d44a3d;
 }
 
 .consent-detalles {
@@ -137,12 +137,12 @@
 }
 
 .btn-consent-necesarias {
-  background: #4A90E2;
+  background: #55B2B6;
   color: white;
 }
 
 .btn-consent-necesarias:hover {
-  background: #3a7bc8;
+  background: #3a7f83;
 }
 
 .btn-consent-aceptar {
