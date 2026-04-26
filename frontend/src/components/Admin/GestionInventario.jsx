@@ -86,10 +86,12 @@ function GestionInventario() {
     }
   };
 
-  const productosFiltrados = productos.filter(p => 
-    p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-    p.idProducto.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  const productosFiltrados = productos
+    .filter(p =>
+      p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+      p.idProducto.toLowerCase().includes(busqueda.toLowerCase())
+    )
+    .sort((a, b) => a.idProducto.localeCompare(b.idProducto));
 
   return (
     <div className="admin-section">

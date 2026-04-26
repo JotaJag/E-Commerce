@@ -103,7 +103,7 @@ function GestionColecciones() {
           </tr>
         </thead>
         <tbody>
-          {colecciones.map(coleccion => (
+          {[...colecciones].sort((a, b) => a.id - b.id).map(coleccion => (
             <tr key={coleccion.id}>
               <td>{coleccion.id}</td>
               <td>

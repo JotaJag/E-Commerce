@@ -60,11 +60,13 @@ function GestionClientes() {
     }
   };
 
-  const clientesFiltrados = clientes.filter(c => 
-    (c.usuario_nombre && c.usuario_nombre.toLowerCase().includes(busqueda.toLowerCase())) ||
-    (c.usuario_email && c.usuario_email.toLowerCase().includes(busqueda.toLowerCase())) ||
-    (c.codigoCuenta && c.codigoCuenta.toString().includes(busqueda))
-  );
+  const clientesFiltrados = clientes
+    .filter(c =>
+      (c.usuario_nombre && c.usuario_nombre.toLowerCase().includes(busqueda.toLowerCase())) ||
+      (c.usuario_email && c.usuario_email.toLowerCase().includes(busqueda.toLowerCase())) ||
+      (c.codigoCuenta && c.codigoCuenta.toString().includes(busqueda))
+    )
+    .sort((a, b) => (a.codigoCuenta || 0) - (b.codigoCuenta || 0));
 
   return (
     <div className="admin-section">

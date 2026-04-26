@@ -263,7 +263,7 @@ function GestionBanners() {
               </td>
             </tr>
           ) : (
-            banners.map(banner => (
+            [...banners].sort((a, b) => (a.idBanner || a.id) - (b.idBanner || b.id)).map(banner => (
               <tr key={banner.idBanner}>
                 <td>{banner.orden}</td>
                 <td>{banner.titulo}</td>

@@ -101,7 +101,7 @@ function GestionCategorias() {
           </tr>
         </thead>
         <tbody>
-          {categorias.map(categoria => (
+          {[...categorias].sort((a, b) => a.id - b.id).map(categoria => (
             <tr key={categoria.id}>
               <td>{categoria.id}</td>
               <td>{categoria.nombre}</td>

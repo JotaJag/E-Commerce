@@ -133,9 +133,9 @@ function GestionMenus() {
     }
   };
 
-  const menusFiltrados = menus.filter(m => 
-    m.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  const menusFiltrados = menus
+    .filter(m => m.nombre.toLowerCase().includes(busqueda.toLowerCase()))
+    .sort((a, b) => a.id - b.id);
 
   // Función para renderizar menús de forma recursiva
   const renderMenus = (menuList, nivel = 0) => {

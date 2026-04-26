@@ -44,11 +44,13 @@ function GestionPedidos() {
     }
   };
 
-  const pedidosFiltrados = pedidos.filter(p => 
-    p.idPedido.toString().includes(busqueda) ||
-    (p.cliente_nombre && p.cliente_nombre.toLowerCase().includes(busqueda.toLowerCase())) ||
-    (p.cliente_email && p.cliente_email.toLowerCase().includes(busqueda.toLowerCase()))
-  );
+  const pedidosFiltrados = pedidos
+    .filter(p =>
+      p.idPedido.toString().includes(busqueda) ||
+      (p.cliente_nombre && p.cliente_nombre.toLowerCase().includes(busqueda.toLowerCase())) ||
+      (p.cliente_email && p.cliente_email.toLowerCase().includes(busqueda.toLowerCase()))
+    )
+    .sort((a, b) => a.idPedido - b.idPedido);
 
   const getEstadoBadgeClass = (estado) => {
     const clases = {
