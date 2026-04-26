@@ -128,17 +128,16 @@
 }
 
 @media (max-width: 768px) {
-    /* Mostrar botón hamburguesa */
+    /* Mostrar botón hamburguesa en el flujo del header */
     .menu-hamburger {
         display: flex;
-        position: fixed;
-        left: 1rem;
-        top: 80px;
-        background-color: #F5F5DC;
+        order: 0;
+        flex-shrink: 0;
+        align-self: center;
+        background-color: transparent;
         border-radius: 8px;
-        padding: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        z-index: 999;
+        padding: 6px;
+        box-shadow: none;
     }
 
     .menu-hamburger:active {
@@ -221,57 +220,22 @@
         text-align: left;
         display: block;
         font-size: 1rem;
+        touch-action: manipulation;
     }
 
     .top-menu ul li a .menu-text::after {
         display: none;
     }
 
-    /* Flecha del acordeón: posición absoluta para no alterar el layout del link */
-    .top-menu ul li.has-submenu > a {
-        position: relative;
-        padding-right: 44px;
-    }
-
-    .submenu-arrow {
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: inline-flex;
-        align-items: center;
-        color: #aaa;
-        transition: transform 0.25s ease, color 0.2s ease;
-        pointer-events: none;
-    }
-
-    .submenu-arrow svg {
-        transition: transform 0.25s ease;
-    }
-
-    .submenu-arrow.open {
-        color: #E85B4E;
-    }
-
-    .submenu-arrow.open svg {
-        transform: rotate(180deg);
-    }
-
-    /* Submenús en modo móvil - acordeón con max-height para evitar saltos */
+    /* Submenús siempre visibles en móvil */
     .top-menu .submenu {
         position: static;
         box-shadow: none;
         background-color: transparent;
         min-width: auto;
-        max-height: 0;
-        overflow: hidden;
+        display: block;
         margin: 0;
         padding: 0;
-        transition: max-height 0.28s ease;
-    }
-
-    .top-menu .submenu.submenu-open {
-        max-height: 600px;
     }
 
     .top-menu .submenu li {
@@ -284,6 +248,7 @@
         font-size: 0.9rem;
         color: #666;
         display: block;
+        touch-action: manipulation;
     }
 
     .top-menu .submenu li a::before {
@@ -302,24 +267,15 @@
 
     /* Desactivar apertura por hover en móvil */
     .top-menu li:hover .submenu {
-        max-height: 0;
-    }
-
-    .top-menu li:hover .submenu.submenu-open {
-        max-height: 600px;
+        display: block;
     }
 }
 
 @media (max-width: 480px) {
     .menu-hamburger {
-        left: 1,9rem;
-        top: 75px;
-        padding: 6px;
-    }
-
-    .menu-hamburger {
         width: 28px;
         height: 23px;
+        padding: 5px;
     }
 
     .menu-hamburger span {

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Menus.css';
 
 const MenuItem = ({ item, onContactoClick, isMobile, onClose }) => {
-  const [open, setOpen] = useState(false);
   const url = item.url || '#';
   const esEnlaceExterno = url.startsWith('http://') || url.startsWith('https://');
   const esContacto = url === '#contacto';
@@ -15,44 +14,26 @@ const MenuItem = ({ item, onContactoClick, isMobile, onClose }) => {
       onContactoClick();
       return;
     }
-    if (isMobile && hasSubmenus) {
-      e.preventDefault();
-      setOpen(p => !p);
-      return;
-    }
     onClose();
   };
 
-  const arrowIcon = hasSubmenus && isMobile && (
-    <span className={`submenu-arrow ${open ? 'open' : ''}`} aria-hidden="true">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    </span>
-  );
-
   const linkContent = <span className="menu-text">{item.nombre}</span>;
+
+  const mainLink = esEnlaceExterno ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" onClick={onClose}>
+      {linkContent}
+    </a>
+  ) : esContacto ? (
+    <a href="#" onClick={handleClick}>{linkContent}</a>
+  ) : (
+    <Link to={url} onClick={handleClick}>{linkContent}</Link>
+  );
 
   return (
     <li className={hasSubmenus ? 'has-submenu' : ''}>
-      {esEnlaceExterno ? (
-        <a href={url} target="_blank" rel="noopener noreferrer" onClick={onClose}>
-          {linkContent}
-        </a>
-      ) : esContacto ? (
-        <a href="#" onClick={handleClick} aria-expanded={hasSubmenus && isMobile ? open : undefined}>
-          {linkContent}
-          {arrowIcon}
-        </a>
-      ) : (
-        <Link to={url} onClick={handleClick} aria-expanded={hasSubmenus && isMobile ? open : undefined}>
-          {linkContent}
-          {arrowIcon}
-        </Link>
-      )}
-
+      {mainLink}
       {hasSubmenus && (
-        <ul className={`submenu ${isMobile && open ? 'submenu-open' : ''}`}>
+        <ul className="submenu">
           {item.submenus.map(sub => (
             <MenuItem
               key={sub.id}
@@ -71,6 +52,7 @@ const MenuItem = ({ item, onContactoClick, isMobile, onClose }) => {
 const Menu = ({ menuAbierto, setMenuAbierto, onContactoClick }) => {
   const [menus, setMenus] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const navRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -100,19 +82,21 @@ const Menu = ({ menuAbierto, setMenuAbierto, onContactoClick }) => {
       .catch(() => {});
   }, []);
 
-  const cerrarMenu = () => setMenuAbierto(false);
+  const cerrarMenu = () => {
+    setMenuAbierto(false);
+    if (navRef.current) navRef.current.scrollTop = 0;
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = menuAbierto ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuAbierto]);
 
   return (
     <>
-      <button className="menu-hamburger" onClick={() => setMenuAbierto(!menuAbierto)} aria-label="Menú">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
       {menuAbierto && <div className="menu-overlay" onClick={cerrarMenu}></div>}
 
-      <nav className={`top-menu ${menuAbierto ? 'menu-open' : ''}`}>
+      <nav ref={navRef} className={`top-menu ${menuAbierto ? 'menu-open' : ''}`}>
         <button className="menu-close" onClick={cerrarMenu} aria-label="Cerrar menú">×</button>
         <ul>
           {menus.map(menu => (

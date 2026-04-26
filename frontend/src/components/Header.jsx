@@ -66,13 +66,19 @@ const Header = () => {
   return (
     <header className="app-header">
       <div className="header-main">
+        <button className="menu-hamburger" onClick={() => setMenuAbierto(!menuAbierto)} aria-label="Abrir menú">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
         <div className="logo">
           <h1>
             <Link to="/">
-              <img 
-                src={logoUrl} 
-                alt="TypeVibe86" 
-                className="header-logo-img" 
+              <img
+                src={logoUrl}
+                alt="TypeVibe86"
+                className="header-logo-img"
               />
             </Link>
           </h1>
