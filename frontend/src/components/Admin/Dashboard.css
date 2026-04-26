@@ -7,50 +7,115 @@
 }
 
 .admin-sidebar {
-  background: white;
-  padding: 2rem;
-  border-right: 2px solid #E85B4E;
-}
-
-.admin-sidebar h2 {
-  color: #2C3E50;
-  margin-bottom: 2rem;
-  font-size: 1.5rem;
-  border-bottom: 3px solid #E85B4E;
-  padding-bottom: 1rem;
-}
-
-.admin-nav {
+  background: #ffffff;
+  border-right: 1px solid #e8ecf0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  min-height: calc(100vh - 160px);
+}
+
+/* Cabecera de marca */
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.4rem 1.25rem;
+  background: #f8f9fb;
+  border-bottom: 1px solid #e8ecf0;
+  flex-shrink: 0;
+}
+
+.admin-brand-icon {
+  width: 34px;
+  height: 34px;
+  background: #E85B4E;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.admin-brand-title {
+  color: #1a2535;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-brand-subtitle {
+  color: #8899aa;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+/* Navegación */
+.admin-nav {
+  flex: 1;
+  padding: 0.75rem 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.admin-nav-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.25rem;
+}
+
+.admin-nav-section {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #aab8c8;
+  padding: 0.9rem 0.75rem 0.35rem;
 }
 
 .admin-nav button {
-  padding: 1rem 1.5rem;
-  background: white;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: transparent;
   border: none;
-  border-left: 4px solid transparent;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: #2C3E50;
-  transition: all 0.3s ease;
+  color: #4a6075;
+  transition: background 0.15s ease, color 0.15s ease;
   text-align: left;
-  border-radius: 8px;
+  font-family: inherit;
+}
+
+.admin-nav button svg {
+  flex-shrink: 0;
+  transition: color 0.15s ease;
 }
 
 .admin-nav button:hover {
-  background: #F5F5DC;
-  color: #E85B4E;
-  border-left-color: #E85B4E;
+  background: #f4f6f8;
+  color: #1a2535;
 }
 
 .admin-nav button.active {
-  background: #F5F5DC;
+  background: rgba(232, 91, 78, 0.08);
   color: #E85B4E;
-  border-left-color: #E85B4E;
   font-weight: 600;
+}
+
+.admin-nav button.active svg {
+  color: #E85B4E;
 }
 
 .admin-content {
@@ -372,18 +437,10 @@
 
 .admin-search input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  padding: 0.75rem 1rem;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 1rem;
-}
-
-.admin-search::before {
-  content: '🔍';
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .table-actions {
