@@ -41,6 +41,7 @@
 
 .colecciones-ver-todas:hover {
   transform: translateX(5px);
+  color: #55B2B6;
 }
 
 /* Grid de colecciones */
